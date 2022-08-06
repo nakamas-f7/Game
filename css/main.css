@@ -1,0 +1,68 @@
+/*============ SOMENTE O MAIN ============*/
+
+body{
+    overflow-x: hidden;
+}
+
+
+main{
+    background-image: url(/img/2509.jpg);
+    background-size: cover;
+    
+}
+
+
+
+#ceu{
+    height: 50%;
+}
+
+#pista{
+    display: flex;
+    align-items: flex-end;
+    height: 50%;
+    
+
+}
+
+#gif, #garoto{
+    height: 50%;
+} 
+
+#gif{
+    
+}
+
+#garoto{
+    
+    
+}
+
+#banco{
+    display: flex;
+    position: absolute;
+    height: 10%;
+    
+    animation: Banco 10s infinite ;
+    animation-delay: 0s;
+}
+
+/*==============  Animação ==============*/
+
+@keyframes Banco {
+    0%{
+        margin-left: 150%;
+    }
+
+    100%{
+        margin-left: -50%;
+    }
+}
+
+/*============== Responsividade ==============*/
+
+@media (max-width: 1024px){
+    #gif, #garoto{
+        height: 40%;
+    }
+}
