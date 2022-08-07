@@ -1,5 +1,5 @@
 /*============ SOMENTE O MAIN ============*/
-
+@import url(/scripts/script.js);
 body{
     overflow-x: hidden;
 }
@@ -17,6 +17,11 @@ main{
     height: 50%;
 }
 
+
+.AnimacaoPular{
+    animation: pular 1s linear ;
+}
+
 #pista{
     display: flex;
     align-items: flex-end;
@@ -25,44 +30,29 @@ main{
 
 }
 
-#gif, #garoto{
-    height: 50%;
+#gif{
+    width: 10%;
+    
 } 
 
-#gif{
-    
-}
-
-#garoto{
-    
-    
-}
-
 #banco{
-    display: flex;
     position: absolute;
-    height: 10%;
-    
-    animation: Banco 10s infinite ;
-    animation-delay: 0s;
+    width: 10%;
+    margin-left: 20%;
+    animation: banco 2s infinite linear;
 }
 
 /*==============  Animação ==============*/
 
-@keyframes Banco {
+@keyframes banco{
     0%{
-        margin-left: 150%;
+        margin-left: 120%;
     }
-
     100%{
-        margin-left: -50%;
+        margin-left: 0%;
     }
 }
+
+
 
 /*============== Responsividade ==============*/
-
-@media (max-width: 1024px){
-    #gif, #garoto{
-        height: 40%;
-    }
-}
