@@ -18,10 +18,6 @@ main{
 }
 
 
-.AnimacaoPular{
-    animation: pular 1s linear ;
-}
-
 #pista{
     display: flex;
     align-items: flex-end;
@@ -32,6 +28,7 @@ main{
 
 #gif{
     width: 10%;
+    animation: none;
     
 } 
 
@@ -39,10 +36,35 @@ main{
     position: absolute;
     width: 10%;
     margin-left: 20%;
-    animation: banco 2s infinite linear;
+    animation: banco 4s infinite linear;
 }
 
 /*==============  Animação ==============*/
+
+@keyframes gif{
+    0%{
+        margin-bottom: 0%;
+        
+    }
+    40%{
+        margin-bottom: 20%;
+        
+    }
+
+    50%{
+        margin-bottom: 20%;
+    }
+     
+    60%{
+        margin-bottom: 20%;
+    }
+
+    100%{
+        margin-bottom: 0%;
+        margin-left: 10%;
+    }
+}
+
 
 @keyframes banco{
     0%{
