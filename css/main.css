@@ -1,5 +1,12 @@
 /*============ SOMENTE O MAIN ============*/
 @import url(/scripts/script.js);
+
+:root{
+    --pulo-atras: 10%;
+    --pulo-acima: 20%;
+}
+
+
 body{
     overflow-x: hidden;
 }
@@ -36,34 +43,36 @@ main{
     position: absolute;
     width: 10%;
     margin-left: 20%;
-    animation: banco 4s infinite linear;
+    animation: banco 2s infinite linear;
 }
 
 /*==============  Animação ==============*/
 
-@keyframes gif{
+@keyframes puloatras{
     0%{
         margin-bottom: 0%;
         
     }
     40%{
-        margin-bottom: 20%;
+        margin-bottom: var(--pulo-acima);
         
     }
 
     50%{
-        margin-bottom: 20%;
+        margin-bottom: var(--pulo-acima);
     }
      
     60%{
-        margin-bottom: 20%;
+        margin-bottom: var(--pulo-acima);
     }
 
     100%{
         margin-bottom: 0%;
-        margin-left: 10%;
+        margin-left: var(--pulo-atras);
     }
 }
+
+
 
 
 @keyframes banco{
