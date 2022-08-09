@@ -22,7 +22,7 @@ let KeySpace = true
 function EsquerdaDireita(){
     body.onkeydown = function(event){
         console.log(event.code)
-        if(event.code === 'KeyD'){
+        if(event.code === 'KeyD' && KeySpace === true){
             KeyD = false
             if(valorX < 90 ){
                 if((valorX + valorX) >= 0){
@@ -30,7 +30,7 @@ function EsquerdaDireita(){
                     mexer(valorX, 'KeyD')
                 }
             }
-        }else if(event.code === 'KeyA'){
+        }else if(event.code === 'KeyA' && KeySpace === true){
             KeyA = false
             if(valorX >= 1.5 ){
                 if((valorX + valorX) >= 1){

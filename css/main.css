@@ -15,10 +15,11 @@ body{
 main{
     background-image: url(/img/2509.jpg);
     background-size: cover;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    
     
 }
-
-
 
 #ceu{
     height: 50%;
@@ -81,6 +82,15 @@ main{
     }
     100%{
         margin-left: 0%;
+    }
+}
+
+@keyframes fundo{
+    0%{
+        margin-right: 0;
+    }
+    100%{
+        margin-right: 100%;
     }
 }
 
