@@ -32,8 +32,15 @@ class Find {
 
 
 
+
 }
 
+const main = document.querySelector('main')
 
+const div = document.querySelector('#box')
+
+const dados = new Find(main, div)
+
+console.log(dados.Location())
 
 
