@@ -1,4 +1,4 @@
-class FindLocation {
+export class FindLocation {
     constructor(Box, Object){
         this.Box = Box
         this.Object = Object
@@ -53,20 +53,32 @@ class CreatObject{
         return this.#CreatObjectStart
     }
 
+    get CreatObjectFinal(){
+        return this.#CreatObjectFinal
+    }
+
     #CreatObjectStart(){
-        let Total =  this.Object.length
-        let x = 0
-        while(Total > 0){
-            
-            console.log(Total)
-            Total -= 1
-        }
+        const x = document.createElement(this.Object[1])
+        this.Object[0].prepend(x)
+    }
+
+    #CreatObjectFinal(){
+        const x = document.createElement(this.Object[1])
+        this.Object[0].append(x)
     }
 }
 
+class RemoveObject{
+    constructor(Object){
+        this.Object = Object
+    }
 
-const main =  document.querySelector('main')
+    get RemoveObject(){
+        return this.#RemoveObject
+    }
 
-let teste = new CreatObject([main, 'a'])
+    #RemoveObject(){
+        this.Object.remove()
+    }
+}
 
-teste.CreatObjectStart()

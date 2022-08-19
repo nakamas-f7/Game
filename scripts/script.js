@@ -1,7 +1,8 @@
+import { FindLocation } from "./Classes.js"
 /*============ Variaveis constantes de ligação html============*/ 
 
 const body = document.querySelector('body')
-const pista = document.getElementById('gif')
+const pista = document.getElementById('pista')
 const gif = document.getElementById('gif') 
 const banco = document.getElementById('banco')
 
@@ -117,3 +118,8 @@ function iniciar(){
 }
 
 iniciar()
+
+
+let teste = new FindLocation(pista, gif)
+
+console.log(teste.Location())
