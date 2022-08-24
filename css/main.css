@@ -11,7 +11,7 @@ body{
 }
 
 main{
-    background-image: url(/img/2509.jpg);
+    background-image: url(/1781.jpg);
     background-size: cover;
     background-repeat: no-repeat;
     background-attachment: fixed;
@@ -31,7 +31,7 @@ main{
 
 #gif{
     margin-left: 0;
-    height: 50%;
+    height:  40%;
 
     animation: none;
 } 

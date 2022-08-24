@@ -4,23 +4,26 @@ export class FindLocation {
         this.Object = Object
     }
 
-    get Location(){
+    get GetLocation(){
         return this.#FindLocation
     }
 
     #FindLocation(){
-        const WidthObject = getComputedStyle(this.Object).getPropertyValue('width')
-        const HeightObject = getComputedStyle(this.Object).getPropertyValue('height')
+        const WidthObject = getComputedStyle(this.Object).getPropertyValue('width').split("px")[0]
+        const HeightObject = getComputedStyle(this.Object).getPropertyValue('height').split("px")[0]
 
         const WidthBox = getComputedStyle(this.Box).getPropertyValue('width')
-        const HeightBox = getComputedStyle(this.Box).getPropertyValue('height')
+        const HeightBox = getComputedStyle(this.Box).getPropertyValue('height').split("px")[0]
 
-        const MarginLeft = getComputedStyle(this.Object).getPropertyValue('margin-left')
+        const MarginLeft = getComputedStyle(this.Object).getPropertyValue('margin-left').split("px")[0]
+
         let MarginRight
+
+
         if(Number(MarginLeft.split('px')[0]) === 0){
-            MarginRight = (Number(WidthBox.split('px')[0]) - Number(WidthObject.split('px')[0])) + "px"
+            MarginRight = (Number(WidthBox.split('px')[0]) - Number(WidthObject.split('px')[0]))
         }else if((MarginLeft.split('px')[0]) > 0) {
-            MarginRight = ((Number(WidthBox.split("px")[0]) - Number(MarginLeft.split("px")[0])) - Number(WidthObject.split("px")[0])) + "px"
+            MarginRight = ((Number(WidthBox.split("px")[0]) - Number(MarginLeft.split("px")[0])) - Number(WidthObject.split("px")[0]))
         }
         const Location = [WidthObject, HeightObject, WidthBox, HeightBox, MarginLeft, MarginRight]
 
@@ -28,19 +31,19 @@ export class FindLocation {
     }
 }
 
-class MoveObject{
+export class MoveObject{
     constructor(Object, Location){
         this.Object = Object
-        this.width = Location[0]
-        this.Top = Location[1]
+        this.x = Location[0]
+        this.y = Location[1]
     }
 
-    get MoveLocation(){
+    get GetMoveLocation(){
         return this.#MoveLocation
     }
 
     #MoveLocation(){
-        this.Object.style.transform = "translate(" + this.width + "," + this.Top +  ")"
+        this.Object.style.transform = "translate(" + this.x + "," + this.y +  ")"
     }
 }
 
