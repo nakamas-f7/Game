@@ -19,13 +19,22 @@ class controls{
         const Location = new FindLocation(box, bola)
 
         function Move(){
+            
             const ObjectLeft = Location.GetLocation()[4]
+            const BoxWidth = Location.GetLocation()[2]
+
+            if(ObjectLeft <= BoxWidth && ObjectLeft >= 0){
+                          
+            }else{
+                console.log("Limite alcançado")
+            }
+
             
         }
 
         function verification(button){
             if(button === "KeyA"){
-                if(Left === true){ 
+                if(Left === true){
                     Left = false
                     return true
                 }else if(Left === false){
@@ -36,6 +45,7 @@ class controls{
             }
         }
         document.onkeydown = function(event){
+            console.log(event)
             if(event.code === "KeyA"){
                 if(verification("KeyA") === true){
                     Move()
