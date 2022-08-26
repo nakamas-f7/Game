@@ -30,6 +30,7 @@ main{
 
 #gif{
     margin-left: 90%;
+    margin-top: 0;
     width: 10%;
 
     animation: none;

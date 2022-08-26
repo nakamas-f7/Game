@@ -17,24 +17,30 @@ class Controls{
 
         const box = document.querySelector('main')
         const bola = document.getElementById('gif')
+
+        
         const Location = new FindLocation(box, bola)
+        
         
 
         function Move(){
             
             const ObjectLeft = Location.GetLocation()[4]
-            const BoxWidth = Location.GetLocation()[2]
+            const ObjectRight = Location.GetLocation()[6]
 
-            if(ObjectLeft <= BoxWidth && ObjectLeft >= 0){
-                
-                const move = MoveObject(bola, box, [1, 1])
+            if(ObjectLeft >= 0 && ObjectRight >= 0){
+                const move = new MoveObject(bola, box, [10, 0], "-", "+", "px")
+
+                move.GetMoveLocation()
+
+                console.log("cheguei") 
             }else{
                 console.log("Limite alcançado")
             } 
         }
 
         function verification(button){
-            if(button === this.Buttons[0]){
+            if(button === buttons[0]){
                 if(Left === true){
                     Left = false
                     return true
@@ -45,11 +51,10 @@ class Controls{
                 }
             }
         }
+        const buttons = this.Buttons
         document.onkeydown = function(event){
-            console.log("foi")
-            console.log(this.Buttons[0])
-            if(event.code === this.Buttons[0]){
-                if(verification(this.Buttons[0]) === true){
+            if(event.code === buttons[0]){
+                if(verification(buttons[0]) === true){
                     Move()
                     Left = true
                 }
