@@ -1,9 +1,10 @@
 import {FindLocation} from "./Classes.js"
 import {MoveObject} from "./Classes.js"
 
-class controls{
-    constructor(Object){
+class Controls{
+    constructor(Object, Buttons){
         this.Object = Object
+        this.Buttons = Buttons
         
     }
 
@@ -17,6 +18,7 @@ class controls{
         const box = document.querySelector('main')
         const bola = document.getElementById('gif')
         const Location = new FindLocation(box, bola)
+        
 
         function Move(){
             
@@ -24,16 +26,15 @@ class controls{
             const BoxWidth = Location.GetLocation()[2]
 
             if(ObjectLeft <= BoxWidth && ObjectLeft >= 0){
-                          
+                
+                const move = MoveObject(bola, box, [1, 1])
             }else{
                 console.log("Limite alcançado")
-            }
-
-            
+            } 
         }
 
         function verification(button){
-            if(button === "KeyA"){
+            if(button === this.Buttons[0]){
                 if(Left === true){
                     Left = false
                     return true
@@ -45,9 +46,10 @@ class controls{
             }
         }
         document.onkeydown = function(event){
-            console.log(event)
-            if(event.code === "KeyA"){
-                if(verification("KeyA") === true){
+            console.log("foi")
+            console.log(this.Buttons[0])
+            if(event.code === this.Buttons[0]){
+                if(verification(this.Buttons[0]) === true){
                     Move()
                     Left = true
                 }
@@ -59,6 +61,6 @@ class controls{
 
 const gif = document.getElementById('gif')
 
-const Classe = new controls(gif)
+const Classe = new Controls(gif,["KeyA", "KeyW", "KeyD", "KeyS"])
 
 Classe.GetControl()

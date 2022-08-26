@@ -32,17 +32,21 @@ export class FindLocation {
 }
 
 export class MoveObject{
-    constructor(Object, Location){
+    constructor(Object, Box, Location){
         this.Object = Object
+        this.Box = Box
         this.x = Location[0]
         this.y = Location[1]
     }
+
+    
 
     get GetMoveLocation(){
         return this.#MoveLocation
     }
 
     #MoveLocation(){
+        const Location = FindLocation(this.Box, this.Box)
         this.Object.style.transform = "translate(" + this.x + "," + this.y +  ")"
     }
 }
