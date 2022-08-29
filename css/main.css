@@ -19,6 +19,9 @@ main{
 #ceu{
     height: 50%;
 }
+.Nuvem{
+    width: 100px;
+}
 
 #pista{
     display: flex;
@@ -29,12 +32,11 @@ main{
 }
 
 #gif{
-    margin-left: 90%;
-    margin-top: 0;
-    width: 10%;
-
+    width: 100px;
     animation: none;
 } 
+
+
 
 #banco{
     position: absolute;

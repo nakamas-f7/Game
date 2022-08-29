@@ -12,7 +12,7 @@ export class FindLocation {
         const WidthObject = getComputedStyle(this.Object).getPropertyValue('width').split("px")[0]
         const HeightObject = getComputedStyle(this.Object).getPropertyValue('height').split("px")[0]
 
-        const WidthBox = getComputedStyle(this.Box).getPropertyValue('width')
+        const WidthBox = getComputedStyle(this.Box).getPropertyValue('width').split("px")[0]
         const HeightBox = getComputedStyle(this.Box).getPropertyValue('height').split("px")[0]
 
         const MarginLeft = getComputedStyle(this.Object).getPropertyValue('margin-left').split("px")[0]
@@ -20,7 +20,6 @@ export class FindLocation {
 
         let MarginRight
         let MarginBottom
-
 
         if(Number(MarginLeft.split('px')[0]) === 0){
             MarginRight = (Number(WidthBox.split('px')[0]) - Number(WidthObject.split('px')[0]))
@@ -33,7 +32,6 @@ export class FindLocation {
         }else if((MarginTop.split('px')[0]) > 0) {
             MarginBottom = ((Number(HeightBox.split("px")[0]) - Number(MarginTop.split("px")[0])) - Number(HeightObject.split("px")[0]))
         }
-
 
         const Location = [WidthObject, HeightObject, WidthBox, HeightBox, MarginLeft, MarginTop, MarginRight, MarginBottom]
 
@@ -61,10 +59,16 @@ export class MoveObject{
         const Location = Locate.GetLocation()
        
         if(this.EquacaoX === "-"){
-            console.log(((Location[4] - this.x) + this.type))
-            this.Object.style.marginLeft = ((Location[4] - this.x) + this.type)
+            if(((Number(Location[4]) - this.x)) >= 0){
+                this.Object.style.marginLeft = ((Number(Location[4]) - this.x) + this.type)
+            }else if(((Number(Location[4]) - this.x)) < 0){
+                this.Object.style.marginLeft = 0
+            }
         }else if(this.EquacaoX === "+"){
-            this.Object.style.marginLeft = ((Location[4] + this.x) + this.type)
+            if(Number(Location[4]) <= (Number(Location[2]) / 2) - Number(Location[0])){
+                this.Object.style.marginLeft = ((Number(Location[4]) + this.x) + this.type)
+                console.log(Number(Location[4]) + this.type)
+            }
         }
     }
 }
