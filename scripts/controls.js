@@ -16,30 +16,28 @@ class Controls{
         let Right = true
 
         const box = document.querySelector('main')
-        const bola = document.getElementById('gif')
+        const Player = document.getElementById('Player')
         
-        const Location = new FindLocation(box, bola)
+        const Location = new FindLocation(box, Player)
 
         function Move(Direction){
-            
             const ObjectLeft = Location.GetLocation()[4]
 
             if(Direction === "Left"){
                 if(ObjectLeft >= 0){
-                    const MoveLeft = new MoveObject(bola, box, [10, 0], "-", "+", "px")
+                    const MoveLeft = new MoveObject(Player, box, [5, 0], "-", "+", "px")
                     MoveLeft.GetMoveLocation()
                 }else{
                     console.log("Limite alcançado")
                 } 
             }else if(Direction === "Right"){
                 if(ObjectLeft >= 0){
-                    const MoveRight = new MoveObject(bola, box, [10, 0], "+", "+", "px")
+                    const MoveRight = new MoveObject(Player, box, [5, 0], "+", "+", "px")
                     MoveRight.GetMoveLocation()
                 }else{
                     console.log("Limite alcançado")
                 } 
             }
-
         }
 
         function verification(button){
@@ -80,8 +78,8 @@ class Controls{
 }
 
 }
-const gif = document.getElementById('gif')
+const Player = document.getElementById('Player')
 
-const Classe = new Controls(gif,["KeyA", "KeyW", "KeyD", "KeyS"])
+const Classe = new Controls(Player,["KeyA", "KeyW", "KeyD", "KeyS"])
 
 Classe.GetControl()

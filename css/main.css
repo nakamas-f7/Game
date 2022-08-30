@@ -1,8 +1,9 @@
 /*============ SOMENTE O MAIN ============*/
 
 :root{
-    --pulo-atras: 10%;
-    --pulo-acima: 20%;
+    --Start-Walk: 0;
+    --Final-Walk: 0;
+
 }
 
 body{
@@ -31,12 +32,10 @@ main{
     width: 100%;
 }
 
-#gif{
+#Player{
     width: 100px;
     animation: none;
 } 
-
-
 
 #banco{
     position: absolute;
@@ -47,34 +46,13 @@ main{
 
 /*==============  Animação ==============*/
 
-@keyframes puloatras{
-    0%{
-        margin-bottom: 0%;
+@keyframes Walk{
+    from{
+        margin-left: var(--Start-Walk);
     }
-    40%{
-        margin-bottom: var(--pulo-acima);
-    }
-    50%{
-        margin-bottom: var(--pulo-acima);
-    }
-    60%{
-        margin-bottom: var(--pulo-acima);
-    }
-    100%{
-        margin-bottom: 0%;
-        margin-left: var(--pulo-atras);
+    to{
+        margin-left: var(--Final-Walk);
     }
 }
-
-@keyframes banco{
-    0%{
-        margin-left: 100%;
-    }
-    100%{
-        margin-left: 0%;
-    }
-}
-
-
 
 /*============== Responsividade ==============*/
