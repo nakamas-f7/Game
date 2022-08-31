@@ -67,13 +67,13 @@ export class MoveObject{
         }else if(this.EquacaoX === "+"){
             if(Number(Location[4]) <= (Number(Location[2]) / 2) - Number(Location[0])){
                 this.Object.style.marginLeft = ((Number(Location[4]) + this.x) + this.type)
-                console.log(Number(Location[4]) + this.type)
             }
         }
     }
 }
 
 class CreatObject{
+    // Lista com o indice 0 sendo a box e o indice 1 sendo o objeto a ser criado
     constructor(Object){
         this.Object = Object
     }

@@ -72,11 +72,10 @@ class Controls{
                 if(verification(buttons[2]) === true){
                     Move("Right")
                     Right = true
+                }
             }
         }
     }
-}
-
 }
 const Player = document.getElementById('Player')
 

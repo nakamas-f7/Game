@@ -11,17 +11,14 @@ body{
 }
 
 main{
-    background-image: url(/1781.jpg);
-    background-size: cover;
-    background-repeat: no-repeat;
-    background-attachment: fixed;
+    background-color: darkslategray;
 }
 
 #ceu{
     height: 50%;
 }
 .Nuvem{
-    width: 100px;
+    height: 60%;
 }
 
 #pista{
@@ -37,12 +34,18 @@ main{
     animation: none;
 } 
 
-#banco{
-    position: absolute;
-    width: 10%;
-    margin-left: 20%;
-    animation: banco 2s infinite linear;
+#Nuvem {
+    margin-left: calc(100% - 250px);
+    width: 250px;
+    height: 150px;
+    position: relative;
+
 }
+#gomo1, #gomo2, #gomo3, #gomo4 {position:absolute; width: 100px; height: 70px; background: #fff; border-radius: 50% 50%; }
+#gomo1{ top: 50px; left: 50px;}
+#gomo2{ top: 75px; left: 100px;}
+#gomo3{ top: 25px; left: 150px;}
+#gomo4{ top: 10px; left: 85px;}
 
 /*==============  Animação ==============*/
 
