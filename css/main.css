@@ -1,8 +1,9 @@
 /*============ SOMENTE O MAIN ============*/
 
 :root{
-    --Start-Walk: 0;
+    --Start-Walk: calc(100% - 250px);
     --Final-Walk: 0;
+    --Sky-MarginLeft: calc(100% - 250px);
 
 }
 
@@ -11,7 +12,7 @@ body{
 }
 
 main{
-    background-color: darkslategray;
+    background-color: #fff;
 }
 
 #ceu{
@@ -35,13 +36,13 @@ main{
 } 
 
 #Nuvem {
-    margin-left: calc(100% - 250px);
+    margin-left: var(--Sky-MarginLeft);
     width: 250px;
     height: 150px;
     position: relative;
 
 }
-#gomo1, #gomo2, #gomo3, #gomo4 {position:absolute; width: 100px; height: 70px; background: #fff; border-radius: 50% 50%; }
+#gomo1, #gomo2, #gomo3, #gomo4 {position:absolute; width: 100px; height: 70px; background: darkcyan; border-radius: 50% 50%; }
 #gomo1{ top: 50px; left: 50px;}
 #gomo2{ top: 75px; left: 100px;}
 #gomo3{ top: 25px; left: 150px;}
@@ -49,11 +50,23 @@ main{
 
 /*==============  Animação ==============*/
 
-@keyframes Walk{
-    from{
+@keyframes Sky{
+    0%{
         margin-left: var(--Start-Walk);
+        opacity: 0;
     }
-    to{
+
+    20%{
+        opacity: 100%;
+    }
+
+
+    80%{
+        opacity: 100%;
+    }
+
+    100%{
+        opacity: 0;
         margin-left: var(--Final-Walk);
     }
 }

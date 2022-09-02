@@ -32,7 +32,6 @@ export class FindLocation {
         }else if((MarginTop.split('px')[0]) > 0) {
             MarginBottom = ((Number(HeightBox.split("px")[0]) - Number(MarginTop.split("px")[0])) - Number(HeightObject.split("px")[0]))
         }
-
         const Location = [WidthObject, HeightObject, WidthBox, HeightBox, MarginLeft, MarginTop, MarginRight, MarginBottom]
 
         return Location

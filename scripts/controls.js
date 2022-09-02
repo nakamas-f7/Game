@@ -25,14 +25,14 @@ class Controls{
 
             if(Direction === "Left"){
                 if(ObjectLeft >= 0){
-                    const MoveLeft = new MoveObject(Player, box, [5, 0], "-", "+", "px")
+                    const MoveLeft = new MoveObject(Player, box, [10, 0], "-", "+", "px")
                     MoveLeft.GetMoveLocation()
                 }else{
                     console.log("Limite alcançado")
                 } 
             }else if(Direction === "Right"){
                 if(ObjectLeft >= 0){
-                    const MoveRight = new MoveObject(Player, box, [5, 0], "+", "+", "px")
+                    const MoveRight = new MoveObject(Player, box, [10, 0], "+", "+", "px")
                     MoveRight.GetMoveLocation()
                 }else{
                     console.log("Limite alcançado")
