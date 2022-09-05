@@ -9,16 +9,12 @@ class Scenario{
         this.Location = new FindLocation(Box, Object)
     }
 
-
     get GetMoveSky(){
         return this.#MoveSky
     }
 
     #MoveSky(){
-        
     }
-
-    
 }
 
 const Sky = document.getElementById('Nuvem')

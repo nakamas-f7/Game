@@ -109,3 +109,34 @@ class RemoveObject{
         this.Object.remove()
     }
 }
+
+export class Connection{
+    constructor(Player, Dados, Objects){
+        this.Player = Player
+        this.Equacao = Dados[0]
+        this.Value = Dados[1]
+        this.Type = Dados[2]
+        this.Box = Dados[3]
+        this.Objects = Objects
+
+    }
+
+    get GetConnection(){
+        return this.#Connection
+    }
+
+    #Connection(){
+        for(let x in this.Objects){
+            let LocationObject = new FindLocation(this.Box, this.Objects[x])
+            if(this.Equacao === "-"){
+                if(((Number(LocationObject.GetLocation()[4]) - this.Value)) >= 0){
+                    this.Objects[x].style.marginLeft = ((Number(LocationObject.GetLocation()[4])) - (Number(this.Value) )) + this.Type
+                }
+            }else if(this.Equacao === "+"){
+                if(Number(LocationObject.GetLocation()[4]) <= (Number(LocationObject.GetLocation()[2]) - Number(LocationObject.GetLocation()[0]))){
+                    this.Objects[x].style.marginLeft = ((Number(LocationObject.GetLocation()[4])) + (Number(this.Value) )) + this.Type
+                }
+            }
+        }
+    }
+}

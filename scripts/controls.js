@@ -1,5 +1,6 @@
 import {FindLocation} from "./Classes.js"
 import {MoveObject} from "./Classes.js"
+import {Connection} from "./Classes.js"
 
 class Controls{
     constructor(Object, Buttons){
@@ -16,16 +17,20 @@ class Controls{
         let Right = true
 
         const box = document.querySelector('main')
+        const Sky = document.getElementById("Nuvem")
         const Player = document.getElementById('Player')
         
         const Location = new FindLocation(box, Player)
 
         function Move(Direction){
             const ObjectLeft = Location.GetLocation()[4]
-
+            const player = Location.GetLocation()
             if(Direction === "Left"){
                 if(ObjectLeft >= 0){
                     const MoveLeft = new MoveObject(Player, box, [10, 0], "-", "+", "px")
+                    const Conexao = new Connection(player, ["+", 10, "px", box], [Sky])
+
+                    Conexao.GetConnection()
                     MoveLeft.GetMoveLocation()
                 }else{
                     console.log("Limite alcançado")
@@ -33,6 +38,8 @@ class Controls{
             }else if(Direction === "Right"){
                 if(ObjectLeft >= 0){
                     const MoveRight = new MoveObject(Player, box, [10, 0], "+", "+", "px")
+                    const Conexao = new Connection(player, ["-", 10, "px", box], [Sky])
+                    Conexao.GetConnection()
                     MoveRight.GetMoveLocation()
                 }else{
                     console.log("Limite alcançado")
