@@ -12,7 +12,7 @@ body{
 }
 
 main{
-    background-image: url(/);
+
 }
 
 #ceu{
@@ -40,13 +40,12 @@ main{
     width: 250px;
     height: 150px;
     position: relative;
-    animation: Sky 5s infinite linear ;
 
 }
 #gomo1, #gomo2, #gomo3, #gomo4 {
     position:absolute; 
     width: 100px; 
-    height: 70px; 
+    height: 70px;
     background: darkcyan; 
     border-radius: 50% 50%;
 
@@ -56,6 +55,14 @@ main{
 #gomo2{ top: 75px; left: 100px;}
 #gomo3{ top: 25px; left: 140px;}
 #gomo4{ top: 10px; left: 85px;}
+
+#Caixa{
+    position: absolute;
+    height: 100px;
+    width: 50px;
+    background-color: aqua;
+    margin-left: 80%;
+}
 
 /*==============  Animação ==============*/
 

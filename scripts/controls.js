@@ -18,29 +18,36 @@ class Controls{
 
         const box = document.querySelector('main')
         const Sky = document.getElementById("Nuvem")
+        const Caixa = document.getElementById("Caixa")
         const Player = document.getElementById('Player')
         
         const Location = new FindLocation(box, Player)
 
         function Move(Direction){
             const ObjectLeft = Location.GetLocation()[4]
-            const player = Location.GetLocation()
             if(Direction === "Left"){
                 if(ObjectLeft >= 0){
                     const MoveLeft = new MoveObject(Player, box, [10, 0], "-", "+", "px")
-                    const Conexao = new Connection(player, ["+", 10, "px", box], [Sky])
-
-                    Conexao.GetConnection()
-                    MoveLeft.GetMoveLocation()
+                    const Conexao = new Connection(Player, ["+", 5, "px", box], [Caixa])
+                    if(Conexao.GetVerification()[1] === true){
+                        Conexao.GetConnection()
+                        MoveLeft.GetMoveLocation()
+                    }else if(Conexao.GetVerification()[1] === false){ 
+                        console.log("travou")
+                    }
                 }else{
                     console.log("Limite alcançado")
                 } 
             }else if(Direction === "Right"){
                 if(ObjectLeft >= 0){
                     const MoveRight = new MoveObject(Player, box, [10, 0], "+", "+", "px")
-                    const Conexao = new Connection(player, ["-", 10, "px", box], [Sky])
-                    Conexao.GetConnection()
-                    MoveRight.GetMoveLocation()
+                    const Conexao = new Connection(Player, ["-", 5, "px", box], [Caixa])
+                    if(Conexao.GetVerification()[0] === true){
+                        Conexao.GetConnection()
+                        MoveRight.GetMoveLocation()
+                    }else if(Conexao.GetVerification()[0] === false){
+                        console.log("travou")
+                    }
                 }else{
                     console.log("Limite alcançado")
                 } 

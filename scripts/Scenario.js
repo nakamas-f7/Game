@@ -1,19 +1,16 @@
 import {FindLocation} from "./Classes.js"
-import {MoveObject} from "./Classes.js"
 
 class Scenario{
     constructor(Object, Box){
         this.Object = Object
         this.Box = Box
-        this.move = new MoveObject(Object, Box, [10, 0], "-", "+", "px")
-        this.Location = new FindLocation(Box, Object)
     }
 
-    get GetMoveSky(){
-        return this.#MoveSky
+    get GetMoveScenario(){
+        return this.#MoveScenario
     }
 
-    #MoveSky(){
+    #MoveScenario(){
     }
 }
 
