@@ -132,10 +132,16 @@ export class Connection{
             if(this.Equacao === "-"){ // vai pra esquerda
                 if(((Number(LocationObject.GetLocation()[4]) - this.Value)) >= 0){
                     this.Objects[x].style.marginLeft = ((Number(LocationObject.GetLocation()[4])) - (Number(this.Value) )) + this.Type
+                }else if(((Number(LocationObject.GetLocation()[4]) - this.Value)) < 0){
+                    this.Objects[x].style.marginLeft = "0px"
+                    
                 }
             }else if(this.Equacao === "+"){ // Vai pra direita
                 if(Number(LocationObject.GetLocation()[4]) <= (Number(LocationObject.GetLocation()[2]) - Number(LocationObject.GetLocation()[0]))){
                     this.Objects[x].style.marginLeft = ((Number(LocationObject.GetLocation()[4])) + (Number(this.Value) )) + this.Type
+                    
+                }else if(Number(LocationObject.GetLocation()[6]) < 0){
+                    this.Objects[x].style.marginRight = "0px"
                 }
             }
         }
@@ -150,16 +156,12 @@ export class Connection{
             let LocationObject = new FindLocation(this.Box, this.Objects[x])
             let LocationPlayer = new FindLocation(this.Box, this.Player)
 
-            let fromLeft = ((Number(LocationObject.GetLocation()[4]) - Number(LocationPlayer.GetLocation()[0])) - Number(LocationPlayer.GetLocation()[4])) -4
+            let fromLeft = ((Number(LocationObject.GetLocation()[4]) - Number(LocationPlayer.GetLocation()[0])) - Number(LocationPlayer.GetLocation()[4]))
 
             let fromRight = ((LocationObject.GetLocation()[6] - Number(LocationPlayer.GetLocation()[0])) - LocationPlayer.GetLocation()[6])
-
             console.log(fromLeft)
-            if(fromLeft >= 0){
-                return [true, true]
-            }else if(fromLeft < 0){
-                return [false, true]
-            }
+
+            return true
         }
     }
 }

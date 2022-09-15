@@ -29,10 +29,10 @@ class Controls{
                 if(ObjectLeft >= 0){
                     const MoveLeft = new MoveObject(Player, box, [10, 0], "-", "+", "px")
                     const Conexao = new Connection(Player, ["+", 5, "px", box], [Caixa])
-                    if(Conexao.GetVerification()[1] === true){
+                    if(Conexao.GetVerification() === true){
                         Conexao.GetConnection()
                         MoveLeft.GetMoveLocation()
-                    }else if(Conexao.GetVerification()[1] === false){ 
+                    }else if(Conexao.GetVerification() === false){ 
                         console.log("travou")
                     }
                 }else{
@@ -40,12 +40,12 @@ class Controls{
                 } 
             }else if(Direction === "Right"){
                 if(ObjectLeft >= 0){
-                    const MoveRight = new MoveObject(Player, box, [10, 0], "+", "+", "px")
+                    const MoveRight = new MoveObject(Player, box, [5, 0], "+", "+", "px")
                     const Conexao = new Connection(Player, ["-", 5, "px", box], [Caixa])
-                    if(Conexao.GetVerification()[0] === true){
+                    if(Conexao.GetVerification() === true){
                         Conexao.GetConnection()
                         MoveRight.GetMoveLocation()
-                    }else if(Conexao.GetVerification()[0] === false){
+                    }else if(Conexao.GetVerification() === false){
                         console.log("travou")
                     }
                 }else{
@@ -53,7 +53,6 @@ class Controls{
                 } 
             }
         }
-
         function verification(button){
             if(button === buttons[0]){
                 if(Left === true){
