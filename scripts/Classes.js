@@ -155,13 +155,21 @@ export class Connection{
         for(let x in this.Objects){
             let LocationObject = new FindLocation(this.Box, this.Objects[x])
             let LocationPlayer = new FindLocation(this.Box, this.Player)
+            
+            let Objeto1 = {
+                x : Number(LocationObject.GetLocation()[4]),
+                z : Number(LocationPlayer.GetLocation()[4]),
+                p : Number(LocationPlayer.GetLocation()[0])
+            }
+            let Objeto2 = {
+                x : Number(LocationPlayer.GetLocation()[4]),
+                z : Number(LocationObject.GetLocation()[4]),
+                o : Number(LocationObject.GetLocation()[0])
+            }
 
-            let fromLeft = ((Number(LocationObject.GetLocation()[4]) - Number(LocationPlayer.GetLocation()[0])) - Number(LocationPlayer.GetLocation()[4]))
-
-            let fromRight = ((LocationObject.GetLocation()[6] - Number(LocationPlayer.GetLocation()[0])) - LocationPlayer.GetLocation()[6])
-            console.log(fromLeft)
-
-            return true
+            let Distancia1 = Objeto1.x - (Objeto1.z + Objeto1.p)
+            let Distancia2 = Objeto2.x - (Objeto2.z + Objeto2.o)
+            
         }
     }
 }

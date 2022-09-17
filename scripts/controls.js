@@ -17,7 +17,6 @@ class Controls{
         let Right = true
 
         const box = document.querySelector('main')
-        const Sky = document.getElementById("Nuvem")
         const Caixa = document.getElementById("Caixa")
         const Player = document.getElementById('Player')
         
@@ -26,26 +25,26 @@ class Controls{
         function Move(Direction){
             const ObjectLeft = Location.GetLocation()[4]
             if(Direction === "Left"){
+                let Conexao = new Connection(Player, ["+", 10, "px", box], [Caixa])
                 if(ObjectLeft >= 0){
-                    const MoveLeft = new MoveObject(Player, box, [10, 0], "-", "+", "px")
-                    const Conexao = new Connection(Player, ["+", 5, "px", box], [Caixa])
-                    if(Conexao.GetVerification() === true){
+                    if(Conexao.GetVerification()[1] === true){
+                        const MoveLeft = new MoveObject(Player, box, [Conexao.GetVerification()[0], 0], "-", "+", "px")
                         Conexao.GetConnection()
                         MoveLeft.GetMoveLocation()
-                    }else if(Conexao.GetVerification() === false){ 
+                    }else if(Conexao.GetVerification()[1] === false){ 
                         console.log("travou")
                     }
                 }else{
                     console.log("Limite alcançado")
                 } 
             }else if(Direction === "Right"){
+                let Conexao = new Connection(Player, ["-", 10, "px", box], [Caixa])
                 if(ObjectLeft >= 0){
-                    const MoveRight = new MoveObject(Player, box, [5, 0], "+", "+", "px")
-                    const Conexao = new Connection(Player, ["-", 5, "px", box], [Caixa])
-                    if(Conexao.GetVerification() === true){
+                    if(Conexao.GetVerification()[2] === true){
+                        const MoveRight = new MoveObject(Player, box, [Conexao.GetVerification()[0], 0], "+", "+", "px")
                         Conexao.GetConnection()
                         MoveRight.GetMoveLocation()
-                    }else if(Conexao.GetVerification() === false){
+                    }else if(Conexao.GetVerification()[2] === false){
                         console.log("travou")
                     }
                 }else{
