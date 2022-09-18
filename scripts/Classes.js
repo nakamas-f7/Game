@@ -64,7 +64,7 @@ export class MoveObject{
                 this.Object.style.marginLeft = 0
             }
         }else if(this.EquacaoX === "+"){
-            if(Number(Location[4]) <= (Number(Location[2]) / 1) - Number(Location[0])){
+            if(Number(Location[4]) <= (Number(Location[2]) / 2) - Number(Location[0])){
                 this.Object.style.marginLeft = ((Number(Location[4]) + this.x) + this.type)
             }
         }
@@ -132,16 +132,11 @@ export class Connection{
             if(this.Equacao === "-"){ // vai pra esquerda
                 if(((Number(LocationObject.GetLocation()[4]) - this.Value)) >= 0){
                     this.Objects[x].style.marginLeft = ((Number(LocationObject.GetLocation()[4])) - (Number(this.Value) )) + this.Type
-                }else if(((Number(LocationObject.GetLocation()[4]) - this.Value)) < 0){
-                    this.Objects[x].style.marginLeft = "0px"
-                    
                 }
             }else if(this.Equacao === "+"){ // Vai pra direita
                 if(Number(LocationObject.GetLocation()[4]) <= (Number(LocationObject.GetLocation()[2]) - Number(LocationObject.GetLocation()[0]))){
                     this.Objects[x].style.marginLeft = ((Number(LocationObject.GetLocation()[4])) + (Number(this.Value) )) + this.Type
                     
-                }else if(Number(LocationObject.GetLocation()[6]) < 0){
-                    this.Objects[x].style.marginRight = "0px"
                 }
             }
         }
@@ -156,20 +151,33 @@ export class Connection{
             let LocationObject = new FindLocation(this.Box, this.Objects[x])
             let LocationPlayer = new FindLocation(this.Box, this.Player)
             
-            let Objeto1 = {
+            let Objeto = {
                 x : Number(LocationObject.GetLocation()[4]),
                 z : Number(LocationPlayer.GetLocation()[4]),
                 p : Number(LocationPlayer.GetLocation()[0])
             }
-            let Objeto2 = {
-                x : Number(LocationPlayer.GetLocation()[4]),
-                z : Number(LocationObject.GetLocation()[4]),
-                o : Number(LocationObject.GetLocation()[0])
-            }
 
-            let Distancia1 = Objeto1.x - (Objeto1.z + Objeto1.p)
-            let Distancia2 = Objeto2.x - (Objeto2.z + Objeto2.o)
-            
+            let Distancia = Objeto.x - (Objeto.z + Objeto.p)
+            let X = Number(LocationObject.GetLocation()[0]) - ((Number(LocationObject.GetLocation()[0]) * 2) + Number(LocationPlayer.GetLocation()[0]))
+
+            if(Distancia >= 0){
+                if(Distancia >= 10){
+                    return [4, 6, true, true]
+                }else if(Distancia > 0 && Distancia < 10){
+                    return [0, Distancia, true, true]
+                }else if(Distancia === 0){
+                    return [ 4, 6, true, false]
+                }
+            }else if(Distancia < 0){
+                if(Distancia <= X - 10){
+                    return [4, 6, true, true]
+                }else if(Distancia < X && Distancia > X - 10){
+                    let x = (Distancia + (X * -1)) * -1
+                    return [x/2, x/2, true, true]
+                }else if(Distancia === X){
+                    return [ 4, 6, false, true]
+                }
+            }
         }
     }
 }
