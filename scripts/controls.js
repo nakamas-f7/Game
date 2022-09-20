@@ -18,6 +18,7 @@ class Controls{
 
         const box = document.querySelector('main')
         const Caixa = document.getElementById("Caixa")
+        const Caixa2 = document.getElementById("Caixa2")
         const Player = document.getElementById('Player')
         
         const Location = new FindLocation(box, Player)
@@ -25,30 +26,21 @@ class Controls{
         function Move(Direction){
             const ObjectLeft = Location.GetLocation()[4]
             if(Direction === "Left"){
-                let ConexaoX = new Connection(Player, ["+", 0, "px", box], [Caixa])
+                const Conexao = new Connection(Player, ["+", 10, "px", box], [Caixa, Caixa2])
                 if(ObjectLeft >= 0){
-                    if(ConexaoX.GetVerification()[2] === true){
-                        const MoveLeft = new MoveObject(Player, box, [ConexaoX.GetVerification()[0], 0], "-", "+", "px")
-                        let Conexao = new Connection(Player, ["+", ConexaoX.GetVerification()[1], "px", box], [Caixa])
-                        MoveLeft.GetMoveLocation()
-                        Conexao.GetConnection()
-                    }else if(ConexaoX.GetVerification()[2] === false){ 
-                        console.log("travou Esquerda")
-                    }
+                    const MoveLeft = new MoveObject(Player, box, [10, 0], "-", "+", "px")
+                    MoveLeft.GetMoveLocation()
+                    Conexao.GetConnection()
                 }else{
                     console.log("Limite alcançado")
                 } 
             }else if(Direction === "Right"){
-                let ConexaoX = new Connection(Player, ["-", 0, "px", box], [Caixa])
+                const Conexao = new Connection(Player, ["-", 10, "px", box], [Caixa, Caixa2])
                 if(ObjectLeft >= 0){
-                    if(ConexaoX.GetVerification()[3] === true){
-                        const MoveRight = new MoveObject(Player, box, [ConexaoX.GetVerification()[0], 0], "+", "+", "px")
-                        let Conexao = new Connection(Player, ["-", ConexaoX.GetVerification()[1], "px", box], [Caixa])
-                        MoveRight.GetMoveLocation()
-                        Conexao.GetConnection()
-                    }else if(ConexaoX.GetVerification()[3] === false){
-                        console.log("travou Direita")
-                    }
+                    const MoveRight = new MoveObject(Player, box, [10, 0], "+", "+", "px")
+                    MoveRight.GetMoveLocation()
+                    Conexao.GetVerification()
+                    Conexao.GetConnection()
                 }else{
                     console.log("Limite alcançado")
                 } 

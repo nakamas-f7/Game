@@ -64,8 +64,12 @@ export class MoveObject{
                 this.Object.style.marginLeft = 0
             }
         }else if(this.EquacaoX === "+"){
-            if(Number(Location[4]) <= (Number(Location[2]) / 2) - Number(Location[0])){
-                this.Object.style.marginLeft = ((Number(Location[4]) + this.x) + this.type)
+            if(Location[6] > 0){
+                if(Number(Location[4]) <= (Number(Location[2]) / 1) - Number(Location[0])){
+                    this.Object.style.marginLeft = ((Number(Location[4]) + this.x) + this.type)
+                }
+            }else if(Location[6] === 0){
+                this.Object.style.marginLeft = Number(Location[4])
             }
         }
     }
@@ -126,17 +130,19 @@ export class Connection{
     }
 
     #Connection(){
+        const LocationPlayer = new FindLocation(this.Box, this.Player)
         for(let x in this.Objects){
             let LocationObject = new FindLocation(this.Box, this.Objects[x])
 
             if(this.Equacao === "-"){ // vai pra esquerda
                 if(((Number(LocationObject.GetLocation()[4]) - this.Value)) >= 0){
                     this.Objects[x].style.marginLeft = ((Number(LocationObject.GetLocation()[4])) - (Number(this.Value) )) + this.Type
+                }else if(((Number(LocationObject.GetLocation()[4]) - this.Value)) < 0){
+                    this.Objects[x].style.marginLeft = "0px"
                 }
             }else if(this.Equacao === "+"){ // Vai pra direita
                 if(Number(LocationObject.GetLocation()[4]) <= (Number(LocationObject.GetLocation()[2]) - Number(LocationObject.GetLocation()[0]))){
                     this.Objects[x].style.marginLeft = ((Number(LocationObject.GetLocation()[4])) + (Number(this.Value) )) + this.Type
-                    
                 }
             }
         }
@@ -147,36 +153,35 @@ export class Connection{
     }
 
     #Verification(){
+        let LocationPlayer = new FindLocation(this.Box, this.Player)
+        let Objects = []
+
+        const Player = {
+            Altura: Number(LocationPlayer.GetLocation()[1]),
+            Width: Number(LocationPlayer.GetLocation()[0]),
+            ML: Number(LocationPlayer.GetLocation()[4]),
+            MR: LocationPlayer.GetLocation()[6],
+            MT: Number(LocationPlayer.GetLocation()[5]),
+            MB: LocationPlayer.GetLocation()[7]
+        }
+
         for(let x in this.Objects){
             let LocationObject = new FindLocation(this.Box, this.Objects[x])
-            let LocationPlayer = new FindLocation(this.Box, this.Player)
-            
-            let Objeto = {
-                x : Number(LocationObject.GetLocation()[4]),
-                z : Number(LocationPlayer.GetLocation()[4]),
-                p : Number(LocationPlayer.GetLocation()[0])
+            let Obstaculo = {
+                D0: Number(LocationObject.GetLocation()[4]) + Number(LocationObject.GetLocation()[0]), // a margem left fica igual a do player
+                D1: LocationObject.GetLocation()[6] + LocationPlayer.GetLocation()[0] // Com iss0 a margin right fica igual a do player
             }
 
-            let Distancia = Objeto.x - (Objeto.z + Objeto.p)
-            let X = Number(LocationObject.GetLocation()[0]) - ((Number(LocationObject.GetLocation()[0]) * 2) + Number(LocationPlayer.GetLocation()[0]))
+            Objects.push(Obstaculo)
 
-            if(Distancia >= 0){
-                if(Distancia >= 10){
-                    return [4, 6, true, true]
-                }else if(Distancia > 0 && Distancia < 10){
-                    return [0, Distancia, true, true]
-                }else if(Distancia === 0){
-                    return [ 4, 6, true, false]
-                }
-            }else if(Distancia < 0){
-                if(Distancia <= X - 10){
-                    return [4, 6, true, true]
-                }else if(Distancia < X && Distancia > X - 10){
-                    let x = (Distancia + (X * -1)) * -1
-                    return [x/2, x/2, true, true]
-                }else if(Distancia === X){
-                    return [ 4, 6, false, true]
-                }
+            
+
+            
+
+
+        }
+        function Contato(){
+            function verificacao(){
             }
         }
     }

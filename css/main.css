@@ -31,8 +31,8 @@ main{
 }
 
 #Player{
-    margin-left: 20%;
-    width: 100px;
+    margin-left: 35%;
+    width: 10%;
     animation: none;
 } 
 
@@ -59,9 +59,17 @@ main{
 
 #Caixa{
     position: absolute;
-    height: 100px;
-    width: 50px;
+    width: 10%;
+    height: 30%;
     background-color: aqua;
+    margin-left: 20%;
+}
+
+#Caixa2{
+    position: absolute;
+    width: 10%;
+    height: 30%;
+    background-color: blueviolet;
     margin-left: 80%;
 }
 
