@@ -1,8 +1,10 @@
 import {FindLocation} from "./Classes.js"
 import {MoveObject} from "./Classes.js"
-import {Connection} from "./Classes.js"
+import {CreatHouse} from "./Classes.js"
 
-class Controls{
+
+class controls{
+    
     constructor(Object, Buttons){
         this.Object = Object
         this.Buttons = Buttons
@@ -13,34 +15,51 @@ class Controls{
     }
 
     #controls(){
+
+        const Obs1 = {
+            Nome: "div",
+            width: "50px",
+            height: "100px",
+            marginLeft: "calc(100% - 50px)",
+            color: "blue"
+        
+        }
+        
+        const Obs2 = {
+            Nome: "div",
+            width: "50px",
+            height: "200px",
+            marginLeft: "calc(100% - 50px)",
+            color: "green"
+        
+        }
+
         let Left = true
         let Right = true
 
         const box = document.querySelector('main')
-        const Caixa = document.getElementById("Caixa")
-        const Caixa2 = document.getElementById("Caixa2")
+        const pista = document.getElementById("pista")
         const Player = document.getElementById('Player')
+
+        const House = new CreatHouse(pista, [[Obs1, 300], [Obs2, 600]])
         
         const Location = new FindLocation(box, Player)
-
+        
         function Move(Direction){
             const ObjectLeft = Location.GetLocation()[4]
             if(Direction === "Left"){
-                const Conexao = new Connection(Player, ["+", 10, "px", box], [Caixa, Caixa2])
                 if(ObjectLeft >= 0){
                     const MoveLeft = new MoveObject(Player, box, [10, 0], "-", "+", "px")
                     MoveLeft.GetMoveLocation()
-                    Conexao.GetConnection()
+                    House.GetPlay()
                 }else{
                     console.log("Limite alcançado")
                 } 
             }else if(Direction === "Right"){
-                const Conexao = new Connection(Player, ["-", 10, "px", box], [Caixa, Caixa2])
                 if(ObjectLeft >= 0){
                     const MoveRight = new MoveObject(Player, box, [10, 0], "+", "+", "px")
                     MoveRight.GetMoveLocation()
-                    Conexao.GetVerification()
-                    Conexao.GetConnection()
+                    House.GetPlay()
                 }else{
                     console.log("Limite alcançado")
                 } 
@@ -83,8 +102,8 @@ class Controls{
         }
     }
 }
-const Player = document.getElementById('Player')
 
-const Classe = new Controls(Player,["KeyA", "KeyW", "KeyD", "KeyS"])
+
+const Classe = new controls(Player,["KeyA", "KeyW", "KeyD", "KeyS"])
 
 Classe.GetControl()

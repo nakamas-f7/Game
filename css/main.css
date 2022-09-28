@@ -31,7 +31,6 @@ main{
 }
 
 #Player{
-    margin-left: 35%;
     width: 10%;
     animation: none;
 } 
@@ -57,21 +56,7 @@ main{
 #gomo3{ top: 25px; left: 140px;}
 #gomo4{ top: 10px; left: 85px;}
 
-#Caixa{
-    position: absolute;
-    width: 10%;
-    height: 30%;
-    background-color: aqua;
-    margin-left: 20%;
-}
 
-#Caixa2{
-    position: absolute;
-    width: 10%;
-    height: 30%;
-    background-color: blueviolet;
-    margin-left: 80%;
-}
 
 /*==============  Animação ==============*/
 

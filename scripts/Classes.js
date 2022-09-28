@@ -1,3 +1,6 @@
+let WPx = 0
+
+
 export class FindLocation {
     constructor(Box, Object){
         this.Box = Box
@@ -49,6 +52,8 @@ export class MoveObject{
         this.type = Type
     }
 
+    
+
     get GetMoveLocation(){
         return this.#MoveLocation
     }
@@ -60,16 +65,30 @@ export class MoveObject{
         if(this.EquacaoX === "-"){
             if(((Number(Location[4]) - this.x)) >= 0){
                 this.Object.style.marginLeft = ((Number(Location[4]) - this.x) + this.type)
+                if(WPx >= this.x){
+                    WPx -= this.x
+                    console.log(WPx)
+                }
+                
             }else if(((Number(Location[4]) - this.x)) < 0){
                 this.Object.style.marginLeft = 0
+                if(WPx >= this.x){
+                    WPx -= this.x - Number(Location[4])
+                    console.log(WPx)                    
+                }
+
+
             }
         }else if(this.EquacaoX === "+"){
+            WPx += this.x
+            console.log(WPx)
             if(Location[6] > 0){
                 if(Number(Location[4]) <= (Number(Location[2]) / 1) - Number(Location[0])){
                     this.Object.style.marginLeft = ((Number(Location[4]) + this.x) + this.type)
                 }
             }else if(Location[6] === 0){
                 this.Object.style.marginLeft = Number(Location[4])
+
             }
         }
     }
@@ -90,13 +109,20 @@ class CreatObject{
     }
 
     #CreatObjectStart(){
-        const x = document.createElement(this.Object[1])
+        const x = document.createElement(this.Object[1].Nome)
         this.Object[0].prepend(x)
     }
 
     #CreatObjectFinal(){
-        const x = document.createElement(this.Object[1])
+        const x = document.createElement(this.Object[1].Nome)
+
+        x.style.marginLeft = this.Object[1].marginLeft
+        x.style.width = this.Object[1].width
+        x.style.height = this.Object[1].height
+        x.style.backgroundColor = this.Object[1].color
+        x.style.position = "absolute"
         this.Object[0].append(x)
+
     }
 }
 
@@ -130,7 +156,6 @@ export class Connection{
     }
 
     #Connection(){
-        const LocationPlayer = new FindLocation(this.Box, this.Player)
         for(let x in this.Objects){
             let LocationObject = new FindLocation(this.Box, this.Objects[x])
 
@@ -153,35 +178,25 @@ export class Connection{
     }
 
     #Verification(){
-        let LocationPlayer = new FindLocation(this.Box, this.Player)
-        let Objects = []
+        
+    }
+}
 
-        const Player = {
-            Altura: Number(LocationPlayer.GetLocation()[1]),
-            Width: Number(LocationPlayer.GetLocation()[0]),
-            ML: Number(LocationPlayer.GetLocation()[4]),
-            MR: LocationPlayer.GetLocation()[6],
-            MT: Number(LocationPlayer.GetLocation()[5]),
-            MB: LocationPlayer.GetLocation()[7]
-        }
+export class CreatHouse{
+    constructor(Box, Obstaculos){
+        this.Box = Box
+        this.Obstaculos = Obstaculos
+    }
 
-        for(let x in this.Objects){
-            let LocationObject = new FindLocation(this.Box, this.Objects[x])
-            let Obstaculo = {
-                D0: Number(LocationObject.GetLocation()[4]) + Number(LocationObject.GetLocation()[0]), // a margem left fica igual a do player
-                D1: LocationObject.GetLocation()[6] + LocationPlayer.GetLocation()[0] // Com iss0 a margin right fica igual a do player
-            }
+    get GetPlay(){
+        return this.#Play
+    }
 
-            Objects.push(Obstaculo)
-
-            
-
-            
-
-
-        }
-        function Contato(){
-            function verificacao(){
+    #Play(){
+        for(let x in this.Obstaculos){
+            const creat = new CreatObject([this.Box, this.Obstaculos[x][0]])
+            if(WPx === this.Obstaculos[x][1]){
+                creat.CreatObjectFinal()
             }
         }
     }
