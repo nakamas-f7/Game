@@ -1,13 +1,12 @@
 import {FindLocation} from "./Classes.js"
 import {MoveObject} from "./Classes.js"
-import {CreatHouse} from "./Classes.js"
 
-
-class controls{
+export class controls{
     
-    constructor(Object, Buttons){
+    constructor(Object, Buttons, Anda){
         this.Object = Object
         this.Buttons = Buttons
+        this.Andar = Anda
     }
 
     get GetControl(){
@@ -15,33 +14,13 @@ class controls{
     }
 
     #controls(){
-
-        const Obs1 = {
-            Nome: "div",
-            width: "50px",
-            height: "100px",
-            marginLeft: "calc(100% - 50px)",
-            color: "blue"
-        
-        }
-        
-        const Obs2 = {
-            Nome: "div",
-            width: "50px",
-            height: "200px",
-            marginLeft: "calc(100% - 50px)",
-            color: "green"
-        
-        }
-
         let Left = true
         let Right = true
+        const anda = this.Andar
 
         const box = document.querySelector('main')
-        const pista = document.getElementById("pista")
         const Player = document.getElementById('Player')
 
-        const House = new CreatHouse(pista, [[Obs1, 300], [Obs2, 600]])
         
         const Location = new FindLocation(box, Player)
         
@@ -49,17 +28,15 @@ class controls{
             const ObjectLeft = Location.GetLocation()[4]
             if(Direction === "Left"){
                 if(ObjectLeft >= 0){
-                    const MoveLeft = new MoveObject(Player, box, [10, 0], "-", "+", "px")
+                    const MoveLeft = new MoveObject(Player, box, [anda, 0], "-", "+", "px")
                     MoveLeft.GetMoveLocation()
-                    House.GetPlay()
                 }else{
                     console.log("Limite alcançado")
                 } 
             }else if(Direction === "Right"){
                 if(ObjectLeft >= 0){
-                    const MoveRight = new MoveObject(Player, box, [10, 0], "+", "+", "px")
+                    const MoveRight = new MoveObject(Player, box, [anda, 0], "+", "+", "px")
                     MoveRight.GetMoveLocation()
-                    House.GetPlay()
                 }else{
                     console.log("Limite alcançado")
                 } 
@@ -102,8 +79,3 @@ class controls{
         }
     }
 }
-
-
-const Classe = new controls(Player,["KeyA", "KeyW", "KeyD", "KeyS"])
-
-Classe.GetControl()

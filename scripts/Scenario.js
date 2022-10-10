@@ -20,3 +20,5 @@ const Box = document.querySelector('main')
 const Executar = new Scenario(Sky, Box)
 
 Executar.GetSky()
+
+

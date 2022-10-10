@@ -1,5 +1,6 @@
-let WPx = 0
+import {controls} from "./controls.js"
 
+let WPx = 0
 
 export class FindLocation {
     constructor(Box, Object){
@@ -52,8 +53,6 @@ export class MoveObject{
         this.type = Type
     }
 
-    
-
     get GetMoveLocation(){
         return this.#MoveLocation
     }
@@ -74,13 +73,12 @@ export class MoveObject{
                 this.Object.style.marginLeft = 0
                 if(WPx >= this.x){
                     WPx -= this.x - Number(Location[4])
-                    console.log(WPx)                    
+                    console.log(WPx)
                 }
-
-
             }
         }else if(this.EquacaoX === "+"){
-            WPx += this.x
+            
+       
             console.log(WPx)
             if(Location[6] > 0){
                 if(Number(Location[4]) <= (Number(Location[2]) / 1) - Number(Location[0])){
@@ -122,7 +120,6 @@ class CreatObject{
         x.style.backgroundColor = this.Object[1].color
         x.style.position = "absolute"
         this.Object[0].append(x)
-
     }
 }
 
@@ -148,7 +145,6 @@ export class Connection{
         this.Type = Dados[2]
         this.Box = Dados[3]
         this.Objects = Objects
-
     }
 
     get GetConnection(){
@@ -200,4 +196,81 @@ export class CreatHouse{
             }
         }
     }
+}
+
+
+class Distancia{
+    constructor(Player, Obs){
+        this.ListPlayer = Player
+        this.ListObs = Obs
+    }
+
+    get GetDistancia(){
+        return this.#Distancia
+    }
+
+    #Distancia(){
+        const Box = document.querySelector('main')
+
+        for(let x in this.ListObs){
+            let Location = new FindLocation(Box, this.ListObs[x][0])
+            let VDS = this.ListObs[x][1]
+            let DPA = this.ListPlayer[1]
+            let D = DPA - VDS
+            if(D < 0){
+                return false
+            }else if(D > 0){
+                if(D > (VDS + Number(Location[0]))){
+                    return true
+                }else{return false}
+            }else {
+                return false
+            }
+        }
+    }
+}
+
+
+class Fase{
+    constructor(TFase,Player, obs){
+        this.TFase = TFase
+        this.Player =Player
+        this.Obs = obs
+    }
+
+    get Getprincipal(){
+        return this.#principal
+    }
+
+    #principal(){
+        const APx = 10
+        
+        const Classe = new controls(this.Player,["KeyA", "KeyW", "KeyD", "KeyS"], APx)
+
+        Classe.GetControl()
+
+    }
+}
+
+const Player = document.querySelector('Player')
+
+const Obs1 = {
+    Nome: "div",
+    width: "50px",
+    height: "100px",
+    marginLeft: "calc(100% - 50px)",
+    color: "blue"
+}
+        
+const Obs2 = {
+    Nome: "div",
+    width: "50px",
+    height: "150px",
+    marginLeft: "calc(100% - 50px)",
+    color: "green"
+}
+const Fase1 = new Fase(5000, Player, [[Obs1, 500], [Obs2, 1000]])
+
+document.onkeydown = function(event){
+    Fase1.Getprincipal()
 }

@@ -10,51 +10,19 @@
 body{
     overflow: hidden;
 }
-
 main{
-
-}
-
-#ceu{
-    height: 50%;
-}
-.Nuvem{
-    height: 60%;
-}
-
-#pista{
     display: flex;
-    align-items: flex-end;
-    margin-left: 0;
-    height: 50%;
-    width: 100%;
-}
+    flex-direction: column;
 
+}
 #Player{
-    width: 10%;
-    animation: none;
+    position: relative;
+    height: 200px;
+    width: 100px;
+    bottom: calc(-80vh + 200px);
+    
 } 
 
-#Nuvem {
-    margin-left: var(--Sky-MarginLeft);
-    width: 250px;
-    height: 150px;
-    position: relative;
-
-}
-#gomo1, #gomo2, #gomo3, #gomo4 {
-    position:absolute; 
-    width: 100px; 
-    height: 70px;
-    background: darkcyan; 
-    border-radius: 50% 50%;
-
-    
-    }
-#gomo1{ top: 50px; left: 50px;}
-#gomo2{ top: 75px; left: 100px;}
-#gomo3{ top: 25px; left: 140px;}
-#gomo4{ top: 10px; left: 85px;}
 
 
 
