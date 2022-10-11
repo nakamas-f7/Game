@@ -1,8 +1,6 @@
-import {controls} from "./controls.js"
+let WPx = 500
 
-let WPx = 0
-
-export class FindLocation {
+class FindLocation {
     constructor(Box, Object){
         this.Box = Box
         this.Object = Object
@@ -42,7 +40,7 @@ export class FindLocation {
     }
 }
 
-export class MoveObject{
+class MoveObject{
     constructor(Object, Box, Location, EquacaoX, EquacaoY, Type){
         this.Object = Object
         this.Box = Box
@@ -66,29 +64,106 @@ export class MoveObject{
                 this.Object.style.marginLeft = ((Number(Location[4]) - this.x) + this.type)
                 if(WPx >= this.x){
                     WPx -= this.x
-                    console.log(WPx)
                 }
                 
             }else if(((Number(Location[4]) - this.x)) < 0){
                 this.Object.style.marginLeft = 0
                 if(WPx >= this.x){
                     WPx -= this.x - Number(Location[4])
-                    console.log(WPx)
                 }
             }
         }else if(this.EquacaoX === "+"){
-            
-       
-            console.log(WPx)
             if(Location[6] > 0){
-                if(Number(Location[4]) <= (Number(Location[2]) / 1) - Number(Location[0])){
+                if(Number(Location[4]) <= (Number(Location[2]) / 2) - Number(Location[0])){
                     this.Object.style.marginLeft = ((Number(Location[4]) + this.x) + this.type)
                 }
             }else if(Location[6] === 0){
                 this.Object.style.marginLeft = Number(Location[4])
+            }
+            WPx += this.x
+        }
+    }
+}
 
+class controls{
+    
+    constructor(Object, Buttons, Anda, Evento){
+        this.Object = Object
+        this.Buttons = Buttons
+        this.Andar = Anda
+        this.Evento = Evento
+    }
+
+    get GetControl(){
+        return this.#controls
+    }
+
+    #controls(){
+        let Left = true
+        let Right = true
+        const anda = this.Andar
+
+        const box = document.querySelector('main')
+        const Player = document.getElementById('Player')
+
+        
+        const Location = new FindLocation(box, Player)
+        
+        function Move(Direction){
+            const ObjectLeft = Location.GetLocation()[4]
+            if(Direction === "Left"){
+                if(ObjectLeft >= 0){
+                    const MoveLeft = new MoveObject(Player, box, [anda, 0], "-", "+", "px")
+                    MoveLeft.GetMoveLocation()
+                    console.log(WPx)
+                    
+                }else{
+                    console.log("Limite alcançado")
+
+                } 
+            }else if(Direction === "Right"){
+                if(ObjectLeft >= 0){
+                    const MoveRight = new MoveObject(Player, box, [anda, 0], "+", "+", "px")
+                    MoveRight.GetMoveLocation()
+                    console.log(WPx)
+                }else{
+                    console.log("Limite alcançado")
+                } 
             }
         }
+        function verification(button){
+            if(button === buttons[0]){
+                if(Left === true){
+                    Left = false
+                    return true
+                }else if(Left === false){
+                    return false
+                }else{
+                    console.log("Algum erro Left")
+                }
+            }else if(button === buttons[2]){
+                if(Right === true){
+                    Right = false
+                    return true
+                }else if(Right === false){
+                    return false
+                }else{
+                    console.log("Algum erro em Right")
+                }
+            }
+        }
+        const buttons = this.Buttons
+        if(this.Evento === buttons[0]){
+            if(verification(buttons[0]) === true){
+                Move("Left")
+                Left = true
+            }
+        }else if(this.Evento === buttons[2]){
+            if(verification(buttons[2]) === true){
+                Move("Right")
+                Right = true
+            }
+        }        
     }
 }
 
@@ -113,13 +188,26 @@ class CreatObject{
 
     #CreatObjectFinal(){
         const x = document.createElement(this.Object[1].Nome)
+        const elemento = document.querySelector(this.Object[1].Nome)
+        
+        let exists = document.body.contains(elemento)
+        if(exists === false){
+            x.style.marginLeft = this.Object[1].marginLeft
+            x.style.width = this.Object[1].width
+            x.style.height = this.Object[1].height
+            x.style.backgroundColor = this.Object[1].color
+            x.style.position = "absolute"
+            x.style.bottom = this.Object[1].bottom
 
-        x.style.marginLeft = this.Object[1].marginLeft
-        x.style.width = this.Object[1].width
-        x.style.height = this.Object[1].height
-        x.style.backgroundColor = this.Object[1].color
-        x.style.position = "absolute"
-        this.Object[0].append(x)
+            this.Object[0].append(x)
+        }else{
+            console.log("já existe")
+        }
+        
+
+
+
+        
     }
 }
 
@@ -137,7 +225,7 @@ class RemoveObject{
     }
 }
 
-export class Connection{
+class Connection{
     constructor(Player, Dados, Objects){
         this.Player = Player
         this.Equacao = Dados[0]
@@ -178,27 +266,6 @@ export class Connection{
     }
 }
 
-export class CreatHouse{
-    constructor(Box, Obstaculos){
-        this.Box = Box
-        this.Obstaculos = Obstaculos
-    }
-
-    get GetPlay(){
-        return this.#Play
-    }
-
-    #Play(){
-        for(let x in this.Obstaculos){
-            const creat = new CreatObject([this.Box, this.Obstaculos[x][0]])
-            if(WPx === this.Obstaculos[x][1]){
-                creat.CreatObjectFinal()
-            }
-        }
-    }
-}
-
-
 class Distancia{
     constructor(Player, Obs){
         this.ListPlayer = Player
@@ -210,11 +277,21 @@ class Distancia{
     }
 
     #Distancia(){
+        let ObjectsInFase = []
         const Box = document.querySelector('main')
-
+        
         for(let x in this.ListObs){
-            let Location = new FindLocation(Box, this.ListObs[x][0])
-            let VDS = this.ListObs[x][1]
+            const creat = new CreatObject([Box, this.ListObs[x][0]])
+            if(this.ListPlayer[1] >= this.ListObs[x][1]){
+                creat.CreatObjectFinal()
+                
+            }
+        }
+        
+        for(let x in ObjectsInFase){
+            
+            let Location = new FindLocation(Box, ObjectsInFase[x])
+            let VDS = ObjectsInFase[x][1]
             let DPA = this.ListPlayer[1]
             let D = DPA - VDS
             if(D < 0){
@@ -227,15 +304,16 @@ class Distancia{
                 return false
             }
         }
+        return true
     }
 }
 
-
 class Fase{
-    constructor(TFase,Player, obs){
+    constructor(TFase,Player, obs, Evento){
         this.TFase = TFase
         this.Player =Player
         this.Obs = obs
+        this.Evento = Evento
     }
 
     get Getprincipal(){
@@ -244,33 +322,46 @@ class Fase{
 
     #principal(){
         const APx = 10
-        
-        const Classe = new controls(this.Player,["KeyA", "KeyW", "KeyD", "KeyS"], APx)
+        const Classe = new controls(this.Player[0],["KeyA", "KeyW", "KeyD", "KeyS"], APx, this.Evento)
 
-        Classe.GetControl()
-
+        const Dis = new Distancia([this.Player[0], this.Player[1]], this.Obs)
+        let pass = Dis.GetDistancia()
+        if(pass === true){
+            Classe.GetControl()
+        }else {
+            console.log("parou aqui")
+        }
     }
 }
 
-const Player = document.querySelector('Player')
+function executa(Evento){
+    const Player = document.querySelector('Player')
+    const box = document.querySelector('main')
+    const body = document.querySelector('body')
+    const Location = new FindLocation(body, box)
 
-const Obs1 = {
-    Nome: "div",
-    width: "50px",
-    height: "100px",
-    marginLeft: "calc(100% - 50px)",
-    color: "blue"
-}
-        
-const Obs2 = {
-    Nome: "div",
-    width: "50px",
-    height: "150px",
-    marginLeft: "calc(100% - 50px)",
-    color: "green"
-}
-const Fase1 = new Fase(5000, Player, [[Obs1, 500], [Obs2, 1000]])
+    const Obs1 = {
+        Nome: "div",
+        width: "50px",
+        height: "100px",
+        marginLeft: "calc(100% - 50px)",
+        color: "blue",
+        bottom: "calc(10vh)"
+    }
+            
+    const Obs2 = {
+        Nome: "div",
+        width: "50px",
+        height: "150px",
+        marginLeft: "calc(100% - 50px)",
+        color: "green",
+        bottom: "calc(10vh)"
+    }
 
-document.onkeydown = function(event){
+    const Fase1 = new Fase(5000, [Player, WPx], [[Obs1, 500 + (Number(Location.GetLocation()[0]) / 2)], [Obs2, 1000 + (Number(Location.GetLocation()[0]) / 2)]], Evento)
     Fase1.Getprincipal()
 }
+
+document.onkeydown = function(event){
+    executa(event.code)
+} 
