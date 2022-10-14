@@ -115,7 +115,6 @@ class controls{
                 if(ObjectLeft >= 0){
                     const MoveLeft = new MoveObject(Player, box, [anda, 0], "-", "+", "px")
                     MoveLeft.GetMoveLocation()
-                    console.log(WPx)
                     
                 }else{
                     console.log("Limite alcançado")
@@ -125,7 +124,6 @@ class controls{
                 if(ObjectLeft >= 0){
                     const MoveRight = new MoveObject(Player, box, [anda, 0], "+", "+", "px")
                     MoveRight.GetMoveLocation()
-                    console.log(WPx)
                 }else{
                     console.log("Limite alcançado")
                 } 
@@ -191,18 +189,15 @@ class CreatObject{
         const elemento = document.querySelector(this.Object[1].Nome)
         
         let exists = document.body.contains(elemento)
-        if(exists === false){
-            x.style.marginLeft = this.Object[1].marginLeft
-            x.style.width = this.Object[1].width
-            x.style.height = this.Object[1].height
-            x.style.backgroundColor = this.Object[1].color
-            x.style.position = "absolute"
-            x.style.bottom = this.Object[1].bottom
+        x.style.marginLeft = this.Object[1].marginLeft
+        x.style.width = this.Object[1].width
+        x.style.height = this.Object[1].height
+        x.style.backgroundColor = this.Object[1].color
+        x.style.position = "absolute"
+        x.style.bottom = this.Object[1].bottom
+        x.id = this.Object[1].Id
 
-            this.Object[0].append(x)
-        }else{
-            console.log("já existe")
-        }
+        this.Object[0].append(x)
         
 
 
@@ -256,20 +251,13 @@ class Connection{
             }
         }
     }
-
-    get GetVerification(){
-        return this.#Verification
-    }
-
-    #Verification(){
-        
-    }
 }
 
 class Distancia{
-    constructor(Player, Obs){
+    constructor(Player, Obs, Evento){
         this.ListPlayer = Player
         this.ListObs = Obs
+        this.Evento = Evento
     }
 
     get GetDistancia(){
@@ -278,15 +266,25 @@ class Distancia{
 
     #Distancia(){
         let ObjectsInFase = []
+
         const Box = document.querySelector('main')
+        const Player = this.ListPlayer[0]
+        
         
         for(let x in this.ListObs){
             const creat = new CreatObject([Box, this.ListObs[x][0]])
+
             if(this.ListPlayer[1] >= this.ListObs[x][1]){
-                creat.CreatObjectFinal()
-                
+                const elemento = document.getElementById(this.ListObs[x][0].Id)
+                if(elemento != null){
+                    ObjectsInFase.push(elemento)
+                }else if(elemento === null){
+                    creat.CreatObjectFinal()
+                }
             }
         }
+
+
         
         for(let x in ObjectsInFase){
             
@@ -309,10 +307,10 @@ class Distancia{
 }
 
 class Fase{
-    constructor(TFase,Player, obs, Evento){
+    constructor(TFase,Player, obj, Evento){
         this.TFase = TFase
         this.Player =Player
-        this.Obs = obs
+        this.Obj = obj
         this.Evento = Evento
     }
 
@@ -324,7 +322,7 @@ class Fase{
         const APx = 10
         const Classe = new controls(this.Player[0],["KeyA", "KeyW", "KeyD", "KeyS"], APx, this.Evento)
 
-        const Dis = new Distancia([this.Player[0], this.Player[1]], this.Obs)
+        const Dis = new Distancia([this.Player[0], this.Player[1]], this.Obj, this.Evento)
         let pass = Dis.GetDistancia()
         if(pass === true){
             Classe.GetControl()
@@ -346,7 +344,8 @@ function executa(Evento){
         height: "100px",
         marginLeft: "calc(100% - 50px)",
         color: "blue",
-        bottom: "calc(10vh)"
+        bottom: "calc(10vh)",
+        Id: "Obs1"
     }
             
     const Obs2 = {
@@ -355,7 +354,8 @@ function executa(Evento){
         height: "150px",
         marginLeft: "calc(100% - 50px)",
         color: "green",
-        bottom: "calc(10vh)"
+        bottom: "calc(10vh)",
+        Id: "Obs2"
     }
 
     const Fase1 = new Fase(5000, [Player, WPx], [[Obs1, 500 + (Number(Location.GetLocation()[0]) / 2)], [Obs2, 1000 + (Number(Location.GetLocation()[0]) / 2)]], Evento)
