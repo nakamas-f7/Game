@@ -34,6 +34,7 @@ export class CreatObject{
         x.style.position = "absolute"
         x.style.bottom = this.Object[1].bottom
         x.id = this.Object[1].Id
+        x.src = this.Object[1].link
 
         this.Object[0].append(x)
     }

@@ -9,22 +9,22 @@
 
 body{
     overflow: hidden;
+
 }
 main{
     display: flex;
-    flex-direction: column;
+    background-image: url(/cenario.jpg);
+    background-repeat: no-repeat;
+    background-size: cover;    
 
 }
 #Player{
     position: relative;
     height: 200px;
-    width: 100px;
+    width: 170px;
     bottom: calc(-80vh + 200px);
     
 } 
-
-
-
 
 /*==============  Animação ==============*/
 

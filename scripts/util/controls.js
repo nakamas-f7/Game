@@ -7,12 +7,14 @@ export class controls{
     #Buttons
     #Andar
     #Evento
+    #Connect
 
-    constructor(Object, Buttons, Anda, Evento){
+    constructor(Object, Buttons, Anda, Evento, Connect){
         this.#Object = Object
         this.#Buttons = Buttons
         this.#Andar = Anda
         this.#Evento = Evento
+        this.#Connect = Connect
     }
 
     get Object(){
@@ -31,6 +33,10 @@ export class controls{
         return this.#Evento
     }
 
+    get Connect(){
+        return this.#Connect
+    }
+
     get GetControl(){
         return this.#controls
     }
@@ -39,6 +45,7 @@ export class controls{
         let Left = true
         let Right = true
         const anda = this.Andar
+        const Connect = this.Connect
 
         
         const box = document.querySelector('main')
@@ -51,7 +58,7 @@ export class controls{
             const ObjectLeft = Location.GetLocation()[4]
             if(Direction === "Left"){
                 if(ObjectLeft >= 0){
-                    const MoveLeft = new MoveObject(Player, box, [anda, 0], "-", null, "px")
+                    const MoveLeft = new MoveObject(Player, box, [anda, 0], "-", null, "px", Connect)
                     MoveLeft.GetMoveLocation()
                     
                 }else{
@@ -60,8 +67,8 @@ export class controls{
                 } 
             }else if(Direction === "Right"){
                 if(ObjectLeft >= 0){
-                    const MoveRight = new MoveObject(Player, box, [anda, 0], "+", null, "px")
-                    MoveRight.GetMoveLocation()
+                    const MoveLeft = new MoveObject(Player, box, [anda, 0], "+", null, "px", Connect)
+                    MoveLeft.GetMoveLocation()
                 }else{
                     console.log("Limite alcançado")
                 } 

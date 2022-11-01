@@ -13,6 +13,7 @@ export class RemoveObject{
     }
 
     #RemoveObject(){
+        console.log(this.Object)
         this.Object.remove()
     }
 }
