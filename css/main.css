@@ -22,7 +22,7 @@ main{
     position: relative;
     height: 200px;
     width: 170px;
-    bottom: calc(-80vh + 200px);
+    top: calc(100% - 200px);
     
 } 
 

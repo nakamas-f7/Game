@@ -1,6 +1,8 @@
 import { FindLocation } from './FindLocation.js'
 import { MoveObject } from '../Principal.js'
 
+// 5
+
 export class controls{
 
     #Object
