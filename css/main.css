@@ -8,22 +8,33 @@
 }
 
 body{
+    position: absolute;
     overflow: hidden;
 
 }
 main{
-    display: flex;
+    position: relative;
     background-image: url(/cenario.jpg);
     background-repeat: no-repeat;
     background-size: cover;    
 
 }
-#Player{
+#ceu{
     position: relative;
+    height: 50%;
+    width: 100%;
+    background-color: blueviolet;
+}
+#pista{
+    position: absolute;
+    height: 50%;
+    width: 100%;
+}
+#Player{
+    position: absolute;
     height: 200px;
     width: 170px;
     top: calc(100% - 200px);
-    
 } 
 
 /*==============  Animação ==============*/

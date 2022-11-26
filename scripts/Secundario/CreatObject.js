@@ -30,7 +30,7 @@ export class CreatObject{
         x.style.height = this.Object[1].height
         x.style.backgroundColor = this.Object[1].color
         x.style.position = "absolute"
-        x.style.bottom = this.Object[1].bottom
+        x.style.top = this.Object[1].top
         x.id = this.Object[1].Id
         x.src = this.Object[1].link
 

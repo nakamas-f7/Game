@@ -152,7 +152,7 @@ class Distancia{
     }
 
     #Distancia(){
-        const Box = document.querySelector('main')
+        const Box = document.getElementById("pista")
         let retorno = [true, [false, null]] // Permitir andar/ lista[Se o objeto ainda existe na fase/ Objetos na tela]
         for(let x in this.ListObs){ // verifica se um elemento já foi usado e saiu da tela
             let cria = true 
@@ -197,8 +197,10 @@ class Distancia{
         for(let x in ObjectsInFase){
             // Verificar a possibilidade de andar 
             let adiante = true
-            const P = new FindLocation(Box, this.ListPlayer[0])
-            const O = new FindLocation(Box, ObjectsInFase[x][0])
+            const Pista = document.getElementById("pista")
+            const P = new FindLocation(Pista, this.ListPlayer[0])
+            const O = new FindLocation(Pista, ObjectsInFase[x][0])
+            console.log(P, O)
             let Left = { // Dados para calculo de contato do lado direito
                 MP: Number(P.GetLocation()[4]),
                 WP: Number(P.GetLocation()[0]),
@@ -225,27 +227,47 @@ class Distancia{
                 HO: Number(O.GetLocation()[1])
             }
 
-            if(this.Evento === "KeyD"){
-                let Calc1 = (Left.MP + Left.WP)
-                let Calc2 = (Left.MO + Left.WO)
-                if(Calc1 <= Left.MO){
-                    adiante = true
-                }else if(Calc1 <= Calc2){
-                    adiante = false
-                    retorno = [adiante, [true, ObjectsInFase]]
-                    break
-                }
-            }else if(this.Evento === "KeyA"){
-                let Calc1 = (Right.MP + Right.WP)
-                let Calc2 = (Right.MO + Right.WO)
-                if(Calc1 <= Right.MO){
-                    adiante = true
-                }else if(Calc1 <= Calc2){
-                    adiante = false
-                    retorno = [adiante, [true, ObjectsInFase]]
-                    break
-                }
+            let top = false // true ele anda livremente e false ele anda com obstaculos
+            let bottom = false // true ele anda livremente e false ele anda com obstaculos
+            let calcBottomO = Bottom.HO + Bottom.MO
+            let calcBottomP = Bottom.HP + Bottom.MP
+
+
+            if(Bottom.MP > calcBottomO){
+                bottom = true
+            }else if(Bottom.MO > calcBottomP){
+                top = true
             }
+
+            if(bottom === false && top === false){
+                if(this.Evento === "KeyD"){
+                    let Calc1 = (Left.MP + Left.WP)
+                    let Calc2 = (Left.MO + Left.WO)
+                    if(Calc1 <= Left.MO){
+                        adiante = true
+                    }else if(Calc1 <= Calc2){
+                        adiante = false
+                        retorno = [adiante, [true, ObjectsInFase]]
+                        break
+                    }
+                }else if(this.Evento === "KeyA"){
+                    let Calc1 = (Right.MP + Right.WP)
+                    let Calc2 = (Right.MO + Right.WO)
+                    if(Calc1 <= Right.MO){
+                        adiante = true
+                    }else if(Calc1 <= Calc2){
+                        adiante = false
+                        retorno = [adiante, [true, ObjectsInFase]]
+                        break
+                    }
+                }else if(this.Evento === "Space"){
+                    console.log("aqui ojeto")
+                }
+            }else if(top === true && bottom === true){
+                adiante === true
+            }
+
+
 
             for(let a in ObjectsInFase){
                 
@@ -334,7 +356,7 @@ function executa(Evento){
         width: "200px",
         height: "100px",
         marginLeft: "calc(100% - 200px)",
-        bottom: "calc(10vh)",
+        top: "calc(10% - 100px)",
         Id: "Obs1",
         link: "pngegg.png"
 
@@ -345,7 +367,7 @@ function executa(Evento){
         width: "200px",
         height: "100px",
         marginLeft: "calc(100% - 200px)",
-        bottom: "calc(10vh)",
+        top: "calc(10% - 100px)",
         Id: "Obs2",
         link: "pngegg.png"
     }
