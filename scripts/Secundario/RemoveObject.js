@@ -1,3 +1,5 @@
+import { controls } from "../util/controls.js"
+
 export class RemoveObject{
     #Object
     constructor(Object){
@@ -13,7 +15,8 @@ export class RemoveObject{
     }
 
     #RemoveObject(){
-        console.log(this.Object)
-        this.Object.remove()
+        const elemento = document.getElementById(this.Object)
+        elemento.parentNode.removeChild(elemento)
+
     }
 }

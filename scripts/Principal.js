@@ -6,6 +6,7 @@ import { RemoveObject } from './Secundario/RemoveObject.js'
 let WPx = 0
 
 let ObjectsInFase = []
+let objetosSaiu = []
 
 export class MoveObject{
     #Object
@@ -153,34 +154,44 @@ class Distancia{
     #Distancia(){
         const Box = document.querySelector('main')
         let retorno = [true, [false, null]] // Permitir andar/ lista[Se o objeto ainda existe na fase/ Objetos na tela]
-        for(let x in this.ListObs){
-            const creat = new CreatObject([Box, this.ListObs[x][0]])
-
-            if(this.ListPlayer[1] >= this.ListObs[x][1]){ // Essa parte é responsavel por permitir criação de objetos
-                const elemento = document.getElementById(this.ListObs[x][0].Id)
-                if(elemento != null){ // Caso o elemento não exista
-                    if(ObjectsInFase.length > 0){ // ele ta repetindo mais vezes do que o total que deveria
-                        let y = false
-                        for(let x in ObjectsInFase){ // esse laço diz se o elemento já existe na lista
-                            if(ObjectsInFase[x].includes(elemento)){
-                                y = true
-                                break
-                            }else{
-                                y = false
-                            }
-                        }
-                        if(y === false){ // aqui ele cria o elemento
-                            ObjectsInFase.push([elemento, this.ListObs[x][1]])
-                        }
-
-                    }else if(ObjectsInFase.length === 0){ // aqui ele cria o elemento
-                        ObjectsInFase.push([elemento, this.ListObs[x][1]])
-                    }
-                }else if(elemento === null){ // Caso o elemento exista
-                    creat.CreatObjectFinal()
+        for(let x in this.ListObs){ // verifica se um elemento já foi usado e saiu da tela
+            let cria = true 
+            for(let b in objetosSaiu){
+                if(objetosSaiu[b][0] == x){
+                    cria = false
                 }
             }
-            
+
+            if(cria === true){
+                const creat = new CreatObject([Box, this.ListObs[x][0]])
+
+                if(this.ListPlayer[1] >= this.ListObs[x][1]){ // Essa parte é responsavel por permitir criação de objetos
+                    const elemento = document.getElementById(this.ListObs[x][0].Id)
+                    if(elemento != null){ // Caso o elemento exista
+                        if(ObjectsInFase.length > 0){
+                            let y = false
+                            for(let x in ObjectsInFase){ // esse laço diz se o elemento já existe na lista
+                                if(ObjectsInFase[x].includes(elemento)){
+                                    y = true
+                                    break
+                                }else{
+                                    y = false
+                                }
+                            }
+                            if(y === false){ // aqui ele cria o elemento
+
+                                ObjectsInFase.push([elemento, this.ListObs[x][1], x])
+                            }
+
+                        }else if(ObjectsInFase.length === 0){ // aqui ele cria o elemento
+                            
+                            ObjectsInFase.push([elemento, this.ListObs[x][1], x])
+                        }
+                    }else if(elemento === null){ // Caso o elemento não exista
+                        creat.CreatObjectFinal()
+                    }
+                }
+            }
         }
 
         for(let x in ObjectsInFase){
@@ -194,26 +205,25 @@ class Distancia{
                 MO: Number(O.GetLocation()[4]),
                 WO: Number(O.GetLocation()[0])
             }
-            let Right = {
+            let Right = { // Dados para calculo de contato do lado Esquerdo
                 MP: Number(P.GetLocation()[6]),
                 WP: Number(P.GetLocation()[0]),
                 MO: Number(O.GetLocation()[6]),
                 WO: Number(O.GetLocation()[0])
             }
 
-            let Bottom = {
+            let Bottom = { // Dados para calculo de contato do lado Bottom
                 MP: Number(P.GetLocation()[7]),
                 HP: Number(P.GetLocation()[1]),
                 MO: Number(O.GetLocation()[7]),
                 HO: Number(O.GetLocation()[1])
             }
-            let Top = {
+            let Top = { // Dados para calculo de contato do lado Top
                 MP: Number(P.GetLocation()[5]),
                 HP: Number(P.GetLocation()[1]),
                 MO: Number(O.GetLocation()[5]),
                 HO: Number(O.GetLocation()[1])
             }
-            let CalcBottom = (Bottom.MO + Bottom.HO) // Calculo do bottom 1
 
             if(this.Evento === "KeyD"){
                 let Calc1 = (Left.MP + Left.WP)
@@ -226,7 +236,6 @@ class Distancia{
                     break
                 }
             }else if(this.Evento === "KeyA"){
-                console.log("Aqui")
                 let Calc1 = (Right.MP + Right.WP)
                 let Calc2 = (Right.MO + Right.WO)
                 if(Calc1 <= Right.MO){
@@ -237,7 +246,25 @@ class Distancia{
                     break
                 }
             }
-            
+
+            for(let a in ObjectsInFase){
+                
+                let marginLo = new FindLocation(Box, ObjectsInFase[a][0])
+                if(Number(marginLo.GetLocation()[4]) + Number(marginLo.GetLocation()[0]) > Number(marginLo.GetLocation()[2])){ // aqui ele verifica se saiu algum objeto pela direita
+                    const removendo = new RemoveObject(ObjectsInFase[a][0].id)
+                    removendo.RemoveObject()
+                    ObjectsInFase.splice(ObjectsInFase.indexOf(ObjectsInFase[a][0]), 1);
+
+                }else if(Number(marginLo.GetLocation()[4]) < 0){ // aqui ele verifica se saiu algum objeto pela esquerda
+                    const removendo = new RemoveObject(ObjectsInFase[a][0].id)
+                    removendo.RemoveObject()
+                    objetosSaiu.push([Number(ObjectsInFase[a][2]), WPx])
+                    ObjectsInFase.splice(ObjectsInFase.indexOf(ObjectsInFase[a][0]), 1)
+                    
+                    
+                }
+            }
+
             retorno = [adiante, [true, ObjectsInFase]] 
         }
         return retorno

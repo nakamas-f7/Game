@@ -24,9 +24,7 @@ export class CreatObject{
 
     #CreatObjectFinal(){
         const x = document.createElement(this.Object[1].Nome)
-        const elemento = document.querySelector(this.Object[1].Nome)
-        
-        let exists = document.body.contains(elemento)
+
         x.style.marginLeft = this.Object[1].marginLeft
         x.style.width = this.Object[1].width
         x.style.height = this.Object[1].height

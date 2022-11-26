@@ -101,12 +101,16 @@ export class controls{
         if(this.Evento === buttons[0]){
             if(verification(buttons[0]) === true){
                 Move("Left")
-                Left = true
+                setInterval(() => {
+                    Left = true
+                }, 100)
             }
         }else if(this.Evento === buttons[2]){
             if(verification(buttons[2]) === true){
                 Move("Right")
-                Right = true
+                setInterval(() => {
+                    Right = true
+                }, 1000)
             }
         }        
     }
