@@ -4,7 +4,6 @@ import { MoveObject } from '../Principal.js'
 // 5
 
 export class controls{
-
     #Object
     #Buttons
     #Andar
@@ -49,11 +48,9 @@ export class controls{
         const anda = this.Andar
         const Connect = this.Connect
 
-        
         const box = document.querySelector('main')
         const Player = document.getElementById('Player')
 
-        
         const Location = new FindLocation(box, Player)
         
         function Move(Direction){
@@ -62,10 +59,8 @@ export class controls{
                 if(ObjectLeft >= 0){
                     const MoveLeft = new MoveObject(Player, box, [anda, 0], "-", null, "px", Connect)
                     MoveLeft.GetMoveLocation()
-                    
                 }else{
                     console.log("Limite alcançado")
-
                 } 
             }else if(Direction === "Right"){
                 if(ObjectLeft >= 0){

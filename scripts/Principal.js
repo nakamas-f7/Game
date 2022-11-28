@@ -4,10 +4,12 @@ import { CreatObject } from './Secundario/CreatObject.js'
 import { RemoveObject } from './Secundario/RemoveObject.js'
 
 let WPx = 0
-
-let ObjectsInFase = []
-let objetosSaiu = []
-
+let Esquerda = []
+let Meio = []
+let Direita = []
+let ObjectsInFase = [Esquerda, Meio, Direita]
+let ObjFase = []
+let seguranca = false
 export class MoveObject{
     #Object
     #Box
@@ -63,23 +65,22 @@ export class MoveObject{
     get Connect(){
         return this.#Connect
     }
-    
     #MoveLocation(){
         // aqui tem uma linha de raciocionio que o Player anda se não tiver nada na tela
         if(this.Connect[0] === false){
             const Locate = new FindLocation(this.Box, this.Object)
-        
             const Location = Locate.GetLocation()
-
             if(this.EquacaoX === "-"){
+                
                 if(((Number(Location[4]) - this.x)) >= 0){
-                    this.Object.style.marginLeft = ((Number(Location[4]) - this.x) + this.type)
+                    if(WPx + Number(Location[0]) < Number(Location[2]) / 2){
+                       this.Object.style.marginLeft = ((Number(Location[4]) - this.x) + this.type) 
+                    }
+                    
                     if(WPx >= this.x){
                         WPx -= this.x
                     }
-                    
                 }else if(((Number(Location[4]) - this.x)) < 0){
-                    this.Object.style.marginLeft = 0
                     if(WPx >= this.x){
                         WPx -= this.x - Number(Location[4])
                     }
@@ -92,51 +93,45 @@ export class MoveObject{
                 }else if(Location[6] === 0){
                     this.Object.style.marginLeft = Number(Location[4])
                 }
-
                 WPx += this.x
             }
-
         // aqui tem uma linha de raciocinio que o player anda se tiver algo na tela 
         }else if(this.Connect[0] === true){
-            for(let x in this.Connect[1]){
-                let ObjetoNaFase = this.Connect[1][x][0]
-                const Locate = new FindLocation(this.Box, ObjetoNaFase)
-        
-                const Location = Locate.GetLocation()
-                if(this.EquacaoX === "-"){ // Aqui ele vai para frente
-                    ObjetoNaFase.style.marginLeft = ((Number(Location[4]) + this.x) + this.type)
-                    WPx -= this.x
-                    
-                    
-                }else if(this.EquacaoX === "+"){ // Aqui ele vai para trás
-                    ObjetoNaFase.style.marginLeft = ((Number(Location[4]) - this.x) + this.type)
-                    WPx += this.x
+            for(let y in this.Connect[1]){
+                for(let x in this.Connect[1][y]){
+                    let ObjetoNaFase = this.Connect[1][y][x][0]
+                    if(ObjetoNaFase != null){
+                        const Locate = new FindLocation(this.Box, ObjetoNaFase)
+                        const Location = Locate.GetLocation()
+                        if(this.EquacaoX === "-"){ // Aqui ele vai para frente
+                            ObjetoNaFase.style.marginLeft = ((Number(Location[4]) + this.x) + this.type)
+                        }else if(this.EquacaoX === "+"){ // Aqui ele vai para trás
+                            ObjetoNaFase.style.marginLeft = ((Number(Location[4]) - this.x) + this.type)
+                        }
+                    }
                 }
+            }
+            if(this.EquacaoX === "-"){ // Aqui ele vai para frente
+                WPx -= this.x
+            }else if(this.EquacaoX === "+"){ // Aqui ele vai para trás
+                WPx += this.x
             }
         }
     }
 }
-
 // 4
-
 class Distancia{
     #ListPlayer
-    #ListObs
     #Evento
     #Apx
-    constructor(Player, Obs, Evento, Apx){
+    constructor(Player,Evento, Apx){
         this.#ListPlayer = Player
-        this.#ListObs = Obs
         this.#Evento = Evento
         this.#Apx = Apx
     }
 
     get ListPlayer(){
         return this.#ListPlayer
-    }
-
-    get ListObs(){
-        return this.#ListObs
     }
 
     get Evento(){
@@ -154,140 +149,145 @@ class Distancia{
     #Distancia(){
         const Box = document.getElementById("pista")
         let retorno = [true, [false, null]] // Permitir andar/ lista[Se o objeto ainda existe na fase/ Objetos na tela]
-        for(let x in this.ListObs){ // verifica se um elemento já foi usado e saiu da tela
-            let cria = true 
-            for(let b in objetosSaiu){
-                if(objetosSaiu[b][0] == x){
-                    cria = false
-                }
-            }
+        for(let x in ObjFase){ // verifica se um elemento já foi usado e saiu da tela
 
-            if(cria === true){
-                const creat = new CreatObject([Box, this.ListObs[x][0]])
-
-                if(this.ListPlayer[1] >= this.ListObs[x][1]){ // Essa parte é responsavel por permitir criação de objetos
-                    const elemento = document.getElementById(this.ListObs[x][0].Id)
-                    if(elemento != null){ // Caso o elemento exista
-                        if(ObjectsInFase.length > 0){
+            const creat = new CreatObject([Box, ObjFase[x][0]])
+            
+            if(this.ListPlayer[1] >= ObjFase[x][1]){ // Essa parte é responsavel por permitir criação de objetos
+                const elemento = document.getElementById(ObjFase[x][0].Id)
+                if(elemento != null){ // Caso o elemento exista
+                    if(ObjFase[x][0].marginLeft === "0px"){
+                        
+                        if(Esquerda.length > 0){
                             let y = false
-                            for(let x in ObjectsInFase){ // esse laço diz se o elemento já existe na lista
-                                if(ObjectsInFase[x].includes(elemento)){
+                            for(let x in Esquerda){ // esse laço diz se o elemento já existe na lista
+                                if(Esquerda[x].includes(elemento)){
                                     y = true
                                     break
-                                }else{
-                                    y = false
                                 }
                             }
-                            if(y === false){ // aqui ele cria o elemento
-
-                                ObjectsInFase.push([elemento, this.ListObs[x][1], x])
+                            if(y === false){ // aqui ele adiciona na lista
+                                
+                                Esquerda.push([elemento, ObjFase[x][1], Number(x)])
                             }
-
-                        }else if(ObjectsInFase.length === 0){ // aqui ele cria o elemento
-                            
-                            ObjectsInFase.push([elemento, this.ListObs[x][1], x])
+                        }else if(Esquerda.length === 0){ // aqui ele adiciona na lista 
+                            console.log("criei")
+                            Esquerda.push([elemento, ObjFase[x][1], Number(x)])
                         }
-                    }else if(elemento === null){ // Caso o elemento não exista
-                        creat.CreatObjectFinal()
+                    }else if(ObjFase[x][0].marginLeft != "0px"){
+                        if(Direita.length > 0){
+                            let y = false
+                            for(let x in Direita){ // esse laço diz se o elemento já existe na lista
+                                if(Direita[x].includes(elemento)){
+                                    y = true
+                                    break
+                                }
+                            }
+                            if(y === false){ // aqui ele adiciona na lista 
+                                Direita.push([elemento, ObjFase[x][1], Number(x)])
+                            }
+                        }else if(Direita.length === 0){ // aqui ele adiciona na lista 
+                            Direita.push([elemento, ObjFase[x][1], Number(x)])
+                        }
                     }
+                }else if(elemento === null){ // Caso o elemento não exista
+                    creat.CreatObjectFinal() // cria elemento
                 }
             }
         }
-
+        // Continue aqui carlos, faça ele receber o novo formato do objetoinfase
         for(let x in ObjectsInFase){
-            // Verificar a possibilidade de andar 
-            let adiante = true
-            const Pista = document.getElementById("pista")
-            const P = new FindLocation(Pista, this.ListPlayer[0])
-            const O = new FindLocation(Pista, ObjectsInFase[x][0])
-            console.log(P, O)
-            let Left = { // Dados para calculo de contato do lado direito
-                MP: Number(P.GetLocation()[4]),
-                WP: Number(P.GetLocation()[0]),
-                MO: Number(O.GetLocation()[4]),
-                WO: Number(O.GetLocation()[0])
-            }
-            let Right = { // Dados para calculo de contato do lado Esquerdo
-                MP: Number(P.GetLocation()[6]),
-                WP: Number(P.GetLocation()[0]),
-                MO: Number(O.GetLocation()[6]),
-                WO: Number(O.GetLocation()[0])
-            }
+            for(let y in ObjectsInFase[x]){
+                let adiante = true
+                const Pista = document.getElementById("pista")
+                const P = new FindLocation(Pista, this.ListPlayer[0])
+                const O = new FindLocation(Pista, ObjectsInFase[x][y][0])
 
-            let Bottom = { // Dados para calculo de contato do lado Bottom
-                MP: Number(P.GetLocation()[7]),
-                HP: Number(P.GetLocation()[1]),
-                MO: Number(O.GetLocation()[7]),
-                HO: Number(O.GetLocation()[1])
-            }
-            let Top = { // Dados para calculo de contato do lado Top
-                MP: Number(P.GetLocation()[5]),
-                HP: Number(P.GetLocation()[1]),
-                MO: Number(O.GetLocation()[5]),
-                HO: Number(O.GetLocation()[1])
-            }
-
-            let top = false // true ele anda livremente e false ele anda com obstaculos
-            let bottom = false // true ele anda livremente e false ele anda com obstaculos
-            let calcBottomO = Bottom.HO + Bottom.MO
-            let calcBottomP = Bottom.HP + Bottom.MP
-
-
-            if(Bottom.MP > calcBottomO){
-                bottom = true
-            }else if(Bottom.MO > calcBottomP){
-                top = true
-            }
-
-            if(bottom === false && top === false){
-                if(this.Evento === "KeyD"){
-                    let Calc1 = (Left.MP + Left.WP)
-                    let Calc2 = (Left.MO + Left.WO)
-                    if(Calc1 <= Left.MO){
-                        adiante = true
-                    }else if(Calc1 <= Calc2){
-                        adiante = false
-                        retorno = [adiante, [true, ObjectsInFase]]
-                        break
-                    }
-                }else if(this.Evento === "KeyA"){
-                    let Calc1 = (Right.MP + Right.WP)
-                    let Calc2 = (Right.MO + Right.WO)
-                    if(Calc1 <= Right.MO){
-                        adiante = true
-                    }else if(Calc1 <= Calc2){
-                        adiante = false
-                        retorno = [adiante, [true, ObjectsInFase]]
-                        break
-                    }
-                }else if(this.Evento === "Space"){
-                    console.log("aqui ojeto")
+                let Left = { // Dados para calculo de contato do lado direito
+                    MP: Number(P.GetLocation()[4]),
+                    WP: Number(P.GetLocation()[0]),
+                    MO: Number(O.GetLocation()[4]),
+                    WO: Number(O.GetLocation()[0])
                 }
-            }else if(top === true && bottom === true){
-                adiante === true
-            }
+                let Right = { // Dados para calculo de contato do lado Esquerdo
+                    MP: Number(P.GetLocation()[6]),
+                    WP: Number(P.GetLocation()[0]),
+                    MO: Number(O.GetLocation()[6]),
+                    WO: Number(O.GetLocation()[0])
+                }
+                let Bottom = { // Dados para calculo de contato do lado Bottom
+                    MP: Number(P.GetLocation()[7]),
+                    HP: Number(P.GetLocation()[1]),
+                    MO: Number(O.GetLocation()[7]),
+                    HO: Number(O.GetLocation()[1])
+                }
+                let top = false // true ele anda livremente e false ele anda com obstaculos
+                let bottom = false // true ele anda livremente e false ele anda com obstaculos
+                let calcBottomO = Bottom.HO + Bottom.MO
+                let calcBottomP = Bottom.HP + Bottom.MP
 
+                // Verificar a possibilidade de andar 
+                if(Bottom.MP > calcBottomO){
+                    bottom = true
+                }else if(Bottom.MO > calcBottomP){
+                    top = true
+                }
 
-
-            for(let a in ObjectsInFase){
+                if(bottom === false && top === false){
+                    if(this.Evento === "KeyD"){
+                        let Calc1 = (Left.MP + Left.WP)
+                        let Calc2 = (Left.MO + Left.WO)
+                        if(Calc1 <= Left.MO){
+                            adiante = true
+                        }else if(Calc1 <= Calc2){
+                            adiante = false
+                            retorno = [adiante, [true, ObjectsInFase]]
+                            break
+                        }
+                    }else if(this.Evento === "KeyA"){
+                        let Calc1 = (Right.MP + Right.WP)
+                        let Calc2 = (Right.MO + Right.WO)
+                        if(Calc1 <= Right.MO){
+                            adiante = true
+                        }else if(Calc1 <= Calc2){
+                            adiante = false
+                            retorno = [adiante, [true, ObjectsInFase]]
+                            break
+                        }
+                    }
+                }else if(top === true && bottom === true){
+                    adiante === true
+                }
                 
-                let marginLo = new FindLocation(Box, ObjectsInFase[a][0])
-                if(Number(marginLo.GetLocation()[4]) + Number(marginLo.GetLocation()[0]) > Number(marginLo.GetLocation()[2])){ // aqui ele verifica se saiu algum objeto pela direita
-                    const removendo = new RemoveObject(ObjectsInFase[a][0].id)
-                    removendo.RemoveObject()
-                    ObjectsInFase.splice(ObjectsInFase.indexOf(ObjectsInFase[a][0]), 1);
-
-                }else if(Number(marginLo.GetLocation()[4]) < 0){ // aqui ele verifica se saiu algum objeto pela esquerda
-                    const removendo = new RemoveObject(ObjectsInFase[a][0].id)
-                    removendo.RemoveObject()
-                    objetosSaiu.push([Number(ObjectsInFase[a][2]), WPx])
-                    ObjectsInFase.splice(ObjectsInFase.indexOf(ObjectsInFase[a][0]), 1)
+                for(let a in ObjectsInFase[x]){
                     
-                    
+                    let marginLo = new FindLocation(Box, ObjectsInFase[x][a][0])
+                    if(Number(marginLo.GetLocation()[4]) + Number(marginLo.GetLocation()[0]) > Number(marginLo.GetLocation()[2])){ // aqui ele verifica se saiu algum objeto pela direita
+                        const removendo = new RemoveObject(ObjectsInFase[x][a][0].id)
+                        
+                        if(ObjFase[a][0].marginLeft === "0px"){
+                            console.log("passei aqui 1")
+                            ObjFase[a][0].marginLeft = "calc(100% - " + marginLo.GetLocation()[0] + "px)"
+                            ObjFase[a][1] -= Number(marginLo.GetLocation()[2]) - Number(marginLo.GetLocation()[0])
+                        }
+                        removendo.RemoveObject()
+                        Direita.pop()
+                        
+                    }else if(Number(marginLo.GetLocation()[4]) < 0){ // aqui ele verifica se saiu algum objeto pela esquerda
+                        const removendo = new RemoveObject(ObjectsInFase[x][a][0].id)
+                        if(ObjFase[a][0].marginLeft === "calc(100% - " + marginLo.GetLocation()[0] + "px)"){
+                            console.log("passei aqui 2")
+                            ObjFase[a][0].marginLeft = "0px"
+                            ObjFase[a][1] += Number(marginLo.GetLocation()[2]) - Number(marginLo.GetLocation()[0])
+                        }
+                        removendo.RemoveObject()
+                        ObjectsInFase[x].splice(ObjectsInFase[x][a].indexOf(ObjectsInFase[x][a][0]), 1)
+                    }
                 }
-            }
 
-            retorno = [adiante, [true, ObjectsInFase]] 
+                retorno = [adiante, [true, ObjectsInFase]]
+            }
+            
         }
         return retorno
     }
@@ -298,12 +298,10 @@ class Distancia{
 class Fase{
     #TFase
     #Player
-    #Obj
     #Evento
-    constructor(TFase,Player, obj, Evento){
+    constructor(TFase,Player,Evento){
         this.#TFase = TFase
         this.#Player =Player
-        this.#Obj = obj
         this.#Evento = Evento
     }
 
@@ -313,10 +311,6 @@ class Fase{
 
     get Player(){
         return this.#Player
-    }
-
-    get Obj(){
-        return this.#Obj
     }
 
     get Evento(){
@@ -329,7 +323,7 @@ class Fase{
 
     #principal(){
         const Apx = 10
-        const Dis = new Distancia([this.Player[0], this.Player[1]], this.Obj, this.Evento, Apx)
+        const Dis = new Distancia([this.Player[0], this.Player[1]],this.Evento, Apx)
         const pass = Dis.GetDistancia()
         if(pass[0] === true){
             const Controle = new controls(this.Player[0],["KeyA", "KeyW", "KeyD", "KeyS"], Apx, this.Evento, pass[1])            
@@ -356,7 +350,7 @@ function executa(Evento){
         width: "200px",
         height: "100px",
         marginLeft: "calc(100% - 200px)",
-        top: "calc(10% - 100px)",
+        top: "calc(100% - 100px)",
         Id: "Obs1",
         link: "pngegg.png"
 
@@ -367,13 +361,19 @@ function executa(Evento){
         width: "200px",
         height: "100px",
         marginLeft: "calc(100% - 200px)",
-        top: "calc(10% - 100px)",
+        top: "calc(100% - 100px)",
         Id: "Obs2",
         link: "pngegg.png"
     }
 
     const ValorSurgimento = Number(Location.GetLocation()[0]) / 2
-    const Fase1 = new Fase(5000, [Player, WPx + Number(widthPlayer.GetLocation()[0])], [[Obs1, 500 + ValorSurgimento], [Obs2, 1000 + ValorSurgimento]], Evento)
+    if(seguranca === false){
+        ObjFase = [[Obs1, 500 + ValorSurgimento], [Obs2, 800 + ValorSurgimento]]
+        seguranca = true
+    }
+
+    
+    const Fase1 = new Fase(5000, [Player, WPx + Number(widthPlayer.GetLocation()[0])],Evento)
     
     Fase1.Getprincipal()
 }
@@ -382,5 +382,4 @@ function executa(Evento){
 
 document.onkeydown = function(event){
     executa(event.code)
-    
-} 
+}
