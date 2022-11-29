@@ -390,6 +390,33 @@ class Distancia{
 
                 // Divisão de objetos nas listas
 
+                if(Right.MO<= Right.MP + Right.WP && Left.MO>= Left.MP + Left.WP){
+                    // Direita
+                    if(Meio.includes(ObjectsInFase[x][y])){
+                        Direita.unshift(ObjectsInFase[x][y])
+                        Meio.pop()
+                    }
+                }else if(Right.MO >= Left.MP + Left.WP && Left.MO <= Left.MP + Left.WP){
+                    // Esquerda
+                    if(Meio.includes(ObjectsInFase[x][y])){
+                        Esquerda.push(ObjectsInFase[x][y])
+                        Meio.shift()
+                    }
+                }else{
+                    if(Meio.includes(ObjectsInFase[x][y])){
+                        //meio
+                    }else{
+                        if(Direita.includes(ObjectsInFase[x][y])){
+                            Meio.push(ObjectsInFase[x][y])
+                            Direita.shift()
+                            
+                        }else if(Esquerda.includes(ObjectsInFase[x][y])){
+                            Meio.unshift(ObjectsInFase[x][y])
+                            Esquerda.pop()
+                        }
+                    }
+
+                }
                 
                 // aqui ele verifica a saida de objetos
 
@@ -401,17 +428,20 @@ class Distancia{
                         ObjFase[y][0].marginLeft = "calc(100% - " + O.GetLocation()[0] + "px)"
                         ObjFase[y][1] -= Number(O.GetLocation()[2]) - Number(O.GetLocation()[0])
                     }
-                    removendo.RemoveObject()
+
                     Direita.pop()
+                    removendo.RemoveObject()
                     
-                }else if(Number(O.GetLocation()[4]) < -1){ // aqui ele verifica se saiu algum objeto pela esquerda
+                    
+                }else if(Number(O.GetLocation()[4]) < 0){ // aqui ele verifica se saiu algum objeto pela esquerda
                     const removendo = new RemoveObject(ObjectsInFase[x][y][0].id)
                     if(ObjFase[y][0].marginLeft != "0px"){
                         ObjFase[y][0].marginLeft = "0px"
                         ObjFase[y][1] += Number(O.GetLocation()[2]) - Number(O.GetLocation()[0])
                     }
+                    console.log("aqui")
+                    Esquerda.pop()
                     removendo.RemoveObject()
-                    Direita.pop()
                 }
 
                 retorno = [adiante, [true, ObjectsInFase]]
@@ -497,7 +527,7 @@ function executa(Evento){
 
     const ValorSurgimento = Number(Location.GetLocation()[0]) / 2
     if(seguranca === false){
-        ObjFase = [[Obs1, 500 + ValorSurgimento], [Obs2, 800 + ValorSurgimento]]
+        ObjFase = [[Obs1, 500 + ValorSurgimento]]
         seguranca = true
     }
 

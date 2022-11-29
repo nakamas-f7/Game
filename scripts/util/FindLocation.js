@@ -37,8 +37,6 @@ export class FindLocation {
             MarginRight = ((Number(WidthBox.split("px")[0]) - Number(MarginLeft.split("px")[0])) - Number(WidthObject.split("px")[0]))
         }
 
-
-
         if(Number(MarginTop.split('px')[0]) === 0){
             MarginBottom = (Number(HeightBox.split('px')[0]) - Number(HeightObject.split('px')[0]))
         }else if((MarginTop.split('px')[0]) > 0 || (MarginTop.split('px')[0]) < 0) {
