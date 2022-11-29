@@ -149,55 +149,184 @@ class Distancia{
     #Distancia(){
         const Box = document.getElementById("pista")
         let retorno = [true, [false, null]] // Permitir andar/ lista[Se o objeto ainda existe na fase/ Objetos na tela]
-        for(let x in ObjFase){ // verifica se um elemento já foi usado e saiu da tela
-
+        for(let x in ObjFase){ // verifica se um elemento está ou não na tela para permitir a criação ou não dele
             const creat = new CreatObject([Box, ObjFase[x][0]])
+            const elemento = document.getElementById(ObjFase[x][0].Id)
             
-            if(this.ListPlayer[1] >= ObjFase[x][1]){ // Essa parte é responsavel por permitir criação de objetos
-                const elemento = document.getElementById(ObjFase[x][0].Id)
-                if(elemento != null){ // Caso o elemento exista
-                    if(ObjFase[x][0].marginLeft === "0px"){
-                        
-                        if(Esquerda.length > 0){
-                            let y = false
-                            for(let x in Esquerda){ // esse laço diz se o elemento já existe na lista
-                                if(Esquerda[x].includes(elemento)){
-                                    y = true
-                                    break
+
+            if(this.ListPlayer[1] >= ObjFase[x][1] && ObjFase[x][0].marginLeft != "0px"){ // aqui se a posição em que for criada não for modificada
+                if(elemento != null){ // elemento não saiu pela direita e está na tela
+                    let cria = false
+                    if(Direita.length > 0){
+                        for(let direita in Direita){
+                            if(Direita[direita].includes(elemento)){ // existe na lista
+                                cria = true
+                                break
+                            }else{ // não existe na lista
+                                if(Meio.length > 0){
+                                    for(let meio in Meio){
+                                        if(Meio[meio].includes(elemento)){ // existe na lista
+                                            cria = true
+                                            break
+                                        }else{ // não existe na lista
+                                            if(Esquerda.length > 0){
+                                                for(let esquerda in Esquerda){
+                                                    if(Esquerda[esquerda].includes(elemento)){ // existe na lista
+                                                        cria = true
+                                                        break
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }else{
+                                    if(Esquerda.length > 0){
+                                        for(let esquerda in Esquerda){
+                                            if(Esquerda[esquerda].includes(elemento)){
+                                                cria = true
+                                                break
+                                            }
+                                        }
+                                    }
                                 }
                             }
-                            if(y === false){ // aqui ele adiciona na lista
-                                
-                                Esquerda.push([elemento, ObjFase[x][1], Number(x)])
-                            }
-                        }else if(Esquerda.length === 0){ // aqui ele adiciona na lista 
-                            console.log("criei")
-                            Esquerda.push([elemento, ObjFase[x][1], Number(x)])
-                        }
-                    }else if(ObjFase[x][0].marginLeft != "0px"){
-                        if(Direita.length > 0){
-                            let y = false
-                            for(let x in Direita){ // esse laço diz se o elemento já existe na lista
-                                if(Direita[x].includes(elemento)){
-                                    y = true
-                                    break
-                                }
-                            }
-                            if(y === false){ // aqui ele adiciona na lista 
-                                Direita.push([elemento, ObjFase[x][1], Number(x)])
-                            }
-                        }else if(Direita.length === 0){ // aqui ele adiciona na lista 
+                        } 
+                        if(cria === false){
                             Direita.push([elemento, ObjFase[x][1], Number(x)])
                         }
+                    }else{
+                        if(Meio.length > 0){
+                            for(let meio in Meio){
+                                if(Meio[meio].includes(elemento)){
+                                    cria = true
+                                    break
+                                }else{
+                                    if(Esquerda.length > 0){
+                                        for(let esquerda in Esquerda){
+                                            if(Esquerda[esquerda].includes(elemento)){
+                                                cria = true
+                                                break
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            if(cria === false){
+                                Direita.push([elemento, ObjFase[x][1], Number(x)])
+                            }
+                        }else{
+                            if(Esquerda.length > 0){
+                                for(let esquerda in Esquerda){
+                                    if(Esquerda[esquerda].includes(elemento)){
+                                        cria = true
+                                        break
+                                    }
+                                }
+                                if(cria === false){
+                                    Direita.push([elemento, ObjFase[x][1], Number(x)])
+                                }
+                            }else{
+                                if(cria === false){
+                                    Direita.push([elemento, ObjFase[x][1], Number(x)])
+                                }
+                            }
+                        }
                     }
-                }else if(elemento === null){ // Caso o elemento não exista
+                }else if(elemento === null){
+                    creat.CreatObjectFinal()
+                }
+            }else if(this.ListPlayer[1] <= ObjFase[x][1] && ObjFase[x][0].marginLeft === "0px"){ // aqui se a posição em que ele sera criado for modificada 
+                if(elemento != null){ // elemento não saiu pela Esquerda e está na tela
+                    let cria = false
+                    if(Esquerda.length > 0){
+                        
+                        for(let esquerda in Esquerda){
+                            if(Esquerda[esquerda].includes(elemento)){
+                                cria = true
+                                break
+                            }else{
+                                if(Meio.length > 0){
+                                    for(let meio in Meio){
+                                        if(Meio[meio].includes(elemento)){
+                                            cria = true
+                                        }else{
+                                            if(Direita.length > 0){
+                                                for(let direita in Direita){
+                                                    if(Direita[direita].includes(elemento)){
+                                                        cria = true
+                                                        break
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }else{
+                                    if(Direita.length > 0){
+                                        for(let direita in Direita){
+                                            if(Direita[direita].includes(elemento)){
+                                                cria = true
+                                                break
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        if(cria === false){
+                            Esquerda.pop([elemento, ObjFase[x][1], Number(x)])
+                        }
+                    }else{
+                        
+                        if(Meio.length > 0){
+                            for(let meio in Meio){
+                                if(Meio[meio].includes(elemento)){
+                                    cria = true
+                                    break
+                                }else{
+                                    if(Direita.length > 0){
+                                        for(let direita in Direita){
+                                            if(Direita[direita].includes(elemento)){
+                                                cria = true
+                                                break
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            if(cria === false){
+                                Esquerda.push([elemento, ObjFase[x][1], Number(x)])
+                            }
+                        }else{
+                            if(Direita.length > 0){
+                                for(let direita in Direita){
+                                    if(Direita[direita].includes(elemento)){
+                                        cria = true
+                                        break
+                                    }
+                                }
+                                if(cria === false){
+                                    Esquerda.push([elemento, ObjFase[x][1], Number(x)])
+                                }
+                            }else{
+                                if(cria === false){
+                                    Esquerda.push([elemento, ObjFase[x][1], Number(x)])
+                                }
+                            }
+                        }
+                    }
+                }else if(elemento === null){ // não esta na tela e vem pela Esquerda
                     creat.CreatObjectFinal() // cria elemento
                 }
             }
         }
+
         // Continue aqui carlos, faça ele receber o novo formato do objetoinfase
         for(let x in ObjectsInFase){
             for(let y in ObjectsInFase[x]){
+                // Divisão de objetos nas listas
+
+
+                // ele verifica o contato entre os objetos
                 let adiante = true
                 const Pista = document.getElementById("pista")
                 const P = new FindLocation(Pista, this.ListPlayer[0])
@@ -258,31 +387,31 @@ class Distancia{
                 }else if(top === true && bottom === true){
                     adiante === true
                 }
+
+                // Divisão de objetos nas listas
+
                 
-                for(let a in ObjectsInFase[x]){
-                    
-                    let marginLo = new FindLocation(Box, ObjectsInFase[x][a][0])
-                    if(Number(marginLo.GetLocation()[4]) + Number(marginLo.GetLocation()[0]) > Number(marginLo.GetLocation()[2])){ // aqui ele verifica se saiu algum objeto pela direita
-                        const removendo = new RemoveObject(ObjectsInFase[x][a][0].id)
-                        
-                        if(ObjFase[a][0].marginLeft === "0px"){
-                            console.log("passei aqui 1")
-                            ObjFase[a][0].marginLeft = "calc(100% - " + marginLo.GetLocation()[0] + "px)"
-                            ObjFase[a][1] -= Number(marginLo.GetLocation()[2]) - Number(marginLo.GetLocation()[0])
-                        }
-                        removendo.RemoveObject()
-                        Direita.pop()
-                        
-                    }else if(Number(marginLo.GetLocation()[4]) < 0){ // aqui ele verifica se saiu algum objeto pela esquerda
-                        const removendo = new RemoveObject(ObjectsInFase[x][a][0].id)
-                        if(ObjFase[a][0].marginLeft === "calc(100% - " + marginLo.GetLocation()[0] + "px)"){
-                            console.log("passei aqui 2")
-                            ObjFase[a][0].marginLeft = "0px"
-                            ObjFase[a][1] += Number(marginLo.GetLocation()[2]) - Number(marginLo.GetLocation()[0])
-                        }
-                        removendo.RemoveObject()
-                        ObjectsInFase[x].splice(ObjectsInFase[x][a].indexOf(ObjectsInFase[x][a][0]), 1)
+                // aqui ele verifica a saida de objetos
+
+
+                
+                if(Number(O.GetLocation()[4]) + Number(O.GetLocation()[0]) > Number(O.GetLocation()[2])){ // aqui ele verifica se saiu algum objeto pela direita
+                    const removendo = new RemoveObject(ObjectsInFase[x][y][0].id)
+                    if(ObjFase[y][0].marginLeft === "0px"){
+                        ObjFase[y][0].marginLeft = "calc(100% - " + O.GetLocation()[0] + "px)"
+                        ObjFase[y][1] -= Number(O.GetLocation()[2]) - Number(O.GetLocation()[0])
                     }
+                    removendo.RemoveObject()
+                    Direita.pop()
+                    
+                }else if(Number(O.GetLocation()[4]) < -1){ // aqui ele verifica se saiu algum objeto pela esquerda
+                    const removendo = new RemoveObject(ObjectsInFase[x][y][0].id)
+                    if(ObjFase[y][0].marginLeft != "0px"){
+                        ObjFase[y][0].marginLeft = "0px"
+                        ObjFase[y][1] += Number(O.GetLocation()[2]) - Number(O.GetLocation()[0])
+                    }
+                    removendo.RemoveObject()
+                    Direita.pop()
                 }
 
                 retorno = [adiante, [true, ObjectsInFase]]
@@ -381,5 +510,6 @@ function executa(Evento){
 // Inicio
 
 document.onkeydown = function(event){
+    console.log(ObjectsInFase)
     executa(event.code)
 }
