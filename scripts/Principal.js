@@ -10,6 +10,8 @@ let Direita = []
 let ObjectsInFase = [Esquerda, Meio, Direita]
 let ObjFase = []
 let seguranca = false
+let direcao = null
+let DadosPulo = [100, 0]
 export class MoveObject{
     #Object
     #Box
@@ -29,39 +31,30 @@ export class MoveObject{
         this.#type = Type
         this.#Connect = Connect
     }
-
     get GetMoveLocation(){
         return this.#MoveLocation
     }
-
     get Object(){
         return this.#Object
     }
-
     get Box(){
         return this.#Box
     }
-
     get x(){
         return this.#x
     }
-
     get y(){
         return this.#y
     }
-
     get EquacaoX(){
         return this.#EquacaoX
     }
-
     get EquacaoY(){
         return this.#EquacaoY
     }
-
     get type(){
         return this.#type
     }
-
     get Connect(){
         return this.#Connect
     }
@@ -71,12 +64,10 @@ export class MoveObject{
             const Locate = new FindLocation(this.Box, this.Object)
             const Location = Locate.GetLocation()
             if(this.EquacaoX === "-"){
-                
                 if(((Number(Location[4]) - this.x)) >= 0){
                     if(WPx + Number(Location[0]) < Number(Location[2]) / 2){
                        this.Object.style.marginLeft = ((Number(Location[4]) - this.x) + this.type) 
                     }
-                    
                     if(WPx >= this.x){
                         WPx -= this.x
                     }
@@ -129,31 +120,24 @@ class Distancia{
         this.#Evento = Evento
         this.#Apx = Apx
     }
-
     get ListPlayer(){
         return this.#ListPlayer
     }
-
     get Evento(){
         return this.#Evento
     }
-
     get Apx(){
         return this.#Apx
     }
-
     get GetDistancia(){
         return this.#Distancia
     }
-
     #Distancia(){
         const Box = document.getElementById("pista")
         let retorno = [true, [false, null]] // Permitir andar/ lista[Se o objeto ainda existe na fase/ Objetos na tela]
         for(let x in ObjFase){ // verifica se um elemento está ou não na tela para permitir a criação ou não dele
             const creat = new CreatObject([Box, ObjFase[x][0]])
             const elemento = document.getElementById(ObjFase[x][0].Id)
-            
-
             if(this.ListPlayer[1] >= ObjFase[x][1] && ObjFase[x][0].marginLeft != "0px"){ // aqui se a posição em que for criada não for modificada
                 if(elemento != null){ // elemento não saiu pela direita e está na tela
                     let cria = false
@@ -226,7 +210,7 @@ class Distancia{
                                     Direita.push([elemento, ObjFase[x][1], Number(x)])
                                 }
                             }else{
-                                if(cria === false){
+                                if(cria === false && ObjFase[x][0].marginLeft != "0px"){
                                     Direita.push([elemento, ObjFase[x][1], Number(x)])
                                 }
                             }
@@ -239,7 +223,6 @@ class Distancia{
                 if(elemento != null){ // elemento não saiu pela Esquerda e está na tela
                     let cria = false
                     if(Esquerda.length > 0){
-                        
                         for(let esquerda in Esquerda){
                             if(Esquerda[esquerda].includes(elemento)){
                                 cria = true
@@ -276,7 +259,6 @@ class Distancia{
                             Esquerda.pop([elemento, ObjFase[x][1], Number(x)])
                         }
                     }else{
-                        
                         if(Meio.length > 0){
                             for(let meio in Meio){
                                 if(Meio[meio].includes(elemento)){
@@ -319,13 +301,9 @@ class Distancia{
                 }
             }
         }
-
         // Continue aqui carlos, faça ele receber o novo formato do objetoinfase
         for(let x in ObjectsInFase){
             for(let y in ObjectsInFase[x]){
-                // Divisão de objetos nas listas
-
-
                 // ele verifica o contato entre os objetos
                 let adiante = true
                 const Pista = document.getElementById("pista")
@@ -354,14 +332,12 @@ class Distancia{
                 let bottom = false // true ele anda livremente e false ele anda com obstaculos
                 let calcBottomO = Bottom.HO + Bottom.MO
                 let calcBottomP = Bottom.HP + Bottom.MP
-
                 // Verificar a possibilidade de andar 
                 if(Bottom.MP > calcBottomO){
                     bottom = true
                 }else if(Bottom.MO > calcBottomP){
                     top = true
                 }
-
                 if(bottom === false && top === false){
                     if(this.Evento === "KeyD"){
                         let Calc1 = (Left.MP + Left.WP)
@@ -388,72 +364,67 @@ class Distancia{
                     adiante === true
                 }
 
-                // Divisão de objetos nas listas
-
-                if(Right.MO<= Right.MP + Right.WP && Left.MO>= Left.MP + Left.WP){
-                    // Direita
-                    if(Meio.includes(ObjectsInFase[x][y])){
-                        Direita.unshift(ObjectsInFase[x][y])
-                        Meio.pop()
+                // aqui ele verifica a saida de objetos e Divisão de objetos nas listas
+                if(Number(O.GetLocation()[4]) + Number(O.GetLocation()[0]) > Number(O.GetLocation()[2])){ // aqui ele verifica se saiu algum objeto pela direita
+                    const removendo = new RemoveObject(ObjectsInFase[x][y][0].id)
+                    for(let F in ObjFase){
+                        if(ObjFase[F][0].Id === ObjectsInFase[x][y][0].id){
+                            if(ObjFase[F][0].marginLeft === "0px"){
+                               ObjFase[F][0].marginLeft = "calc(100% - " + O.GetLocation()[0] + "px)" 
+                               ObjFase[F][1] -= Number(O.GetLocation()[2]) - Number(O.GetLocation()[0])
+                            }
+                        }
                     }
-                }else if(Right.MO >= Left.MP + Left.WP && Left.MO <= Left.MP + Left.WP){
-                    // Esquerda
-                    if(Meio.includes(ObjectsInFase[x][y])){
-                        Esquerda.push(ObjectsInFase[x][y])
-                        Meio.shift()
-                    }
-                }else{
-                    if(Meio.includes(ObjectsInFase[x][y])){
-                        //meio
-                    }else{
-                        if(Direita.includes(ObjectsInFase[x][y])){
-                            Meio.push(ObjectsInFase[x][y])
-                            Direita.shift()
-                            
-                        }else if(Esquerda.includes(ObjectsInFase[x][y])){
-                            Meio.unshift(ObjectsInFase[x][y])
-                            Esquerda.pop()
+                    Direita.pop()
+                    removendo.RemoveObject()
+                }else if(Number(O.GetLocation()[4]) < 0){ // aqui ele verifica se saiu algum objeto pela esquerda
+                    const removendo = new RemoveObject(ObjectsInFase[x][y][0].id)
+                    for(let F in ObjFase){
+                        if(ObjFase[F][0].Id === ObjectsInFase[x][y][0].id){
+                            if(ObjFase[F][0].marginLeft != "0px"){
+                                ObjFase[F][0].marginLeft = "0px"
+                                ObjFase[F][1] += Number(O.GetLocation()[2]) - Number(O.GetLocation()[0])
+                            }
                         }
                     }
 
-                }
-                
-                // aqui ele verifica a saida de objetos
-
-
-                
-                if(Number(O.GetLocation()[4]) + Number(O.GetLocation()[0]) > Number(O.GetLocation()[2])){ // aqui ele verifica se saiu algum objeto pela direita
-                    const removendo = new RemoveObject(ObjectsInFase[x][y][0].id)
-                    if(ObjFase[y][0].marginLeft === "0px"){
-                        ObjFase[y][0].marginLeft = "calc(100% - " + O.GetLocation()[0] + "px)"
-                        ObjFase[y][1] -= Number(O.GetLocation()[2]) - Number(O.GetLocation()[0])
-                    }
-
-                    Direita.pop()
+                    Esquerda.shift()
                     removendo.RemoveObject()
                     
-                    
-                }else if(Number(O.GetLocation()[4]) < 0){ // aqui ele verifica se saiu algum objeto pela esquerda
-                    const removendo = new RemoveObject(ObjectsInFase[x][y][0].id)
-                    if(ObjFase[y][0].marginLeft != "0px"){
-                        ObjFase[y][0].marginLeft = "0px"
-                        ObjFase[y][1] += Number(O.GetLocation()[2]) - Number(O.GetLocation()[0])
+                }else if(Esquerda.length > 0 || Meio.length > 0 || Direita.length > 0){ // Divisão de objetos nas listas
+                    if(Right.MO<= Right.MP + Right.WP && Left.MO>= Left.MP + Left.WP){
+                        // Direita
+                        if(Meio.includes(ObjectsInFase[x][y])){
+                            Direita.unshift(ObjectsInFase[x][y])
+                            Meio.pop()
+                        }
+                    }else if(Right.MO >= Left.MP && Left.MO  <= Right.MP + Right.WP){
+                        // Esquerda
+                        if(Meio.includes(ObjectsInFase[x][y])){
+                            Esquerda.push(ObjectsInFase[x][y])
+                            Meio.shift()
+                        }
+                    }else{
+                        if(Meio.includes(ObjectsInFase[x][y])){
+                            //meio
+                        }else{
+                            if(Direita.includes(ObjectsInFase[x][y])){
+                                Meio.push(ObjectsInFase[x][y])
+                                Direita.shift()
+                                
+                            }else if(Esquerda.includes(ObjectsInFase[x][y])){
+                                Meio.unshift(ObjectsInFase[x][y])
+                                Esquerda.pop()
+                            }
+                        }
                     }
-                    console.log("aqui")
-                    Esquerda.pop()
-                    removendo.RemoveObject()
                 }
-
                 retorno = [adiante, [true, ObjectsInFase]]
             }
-            
         }
         return retorno
     }
 }
-
-// 3
-
 class Fase{
     #TFase
     #Player
@@ -463,47 +434,46 @@ class Fase{
         this.#Player =Player
         this.#Evento = Evento
     }
-
     get TFase(){
         return this.#TFase
     }
-
     get Player(){
         return this.#Player
     }
-
     get Evento(){
         return this.#Evento
     }
-
     get Getprincipal(){
         return this.#principal
     }
-
     #principal(){
         const Apx = 10
         const Dis = new Distancia([this.Player[0], this.Player[1]],this.Evento, Apx)
         const pass = Dis.GetDistancia()
+        const teclas = ["KeyA", "KeyW", "KeyD", "KeyS", "Space"]
+        if(this.Evento === teclas[0]){
+            direcao = "Left"
+        }else if(this.Evento === teclas[1]){
+            direcao = "Top"
+        }else if(this.Evento === teclas[2]){
+            direcao = "Right"
+        }else if(this.Evento === teclas[3]){
+            direcao = "Bottom"
+        }
         if(pass[0] === true){
-            const Controle = new controls(this.Player[0],["KeyA", "KeyW", "KeyD", "KeyS"], Apx, this.Evento, pass[1])            
+            const Controle = new controls(this.Player[0], teclas, Apx, this.Evento, pass[1], DadosPulo)            
             Controle.GetControl()
         }else if(pass[0] === false){
             console.log("parou aqui")
         }
     }
 }
-
-
-// 2
-
 function executa(Evento){
-    
     const Player = document.getElementById('Player')
     const box = document.querySelector('main')
     const body = document.querySelector('body')
     const Location = new FindLocation(body, box)
     const widthPlayer = new FindLocation(box, Player)
-
     const Obs1 = {
         Nome: "img",
         width: "200px",
@@ -512,9 +482,7 @@ function executa(Evento){
         top: "calc(100% - 100px)",
         Id: "Obs1",
         link: "pngegg.png"
-
     }
-            
     const Obs2 = {
         Nome: "img",
         width: "200px",
@@ -524,22 +492,50 @@ function executa(Evento){
         Id: "Obs2",
         link: "pngegg.png"
     }
-
+    const Obs3 = {
+        Nome: "img",
+        width: "200px",
+        height: "100px",
+        marginLeft: "calc(100% - 200px)",
+        top: "calc(100% - 100px)",
+        Id: "Obs3",
+        link: "pngegg.png"
+    }
+    const Obs4 = {
+        Nome: "img",
+        width: "200px",
+        height: "100px",
+        marginLeft: "calc(100% - 200px)",
+        top: "calc(100% - 100px)",
+        Id: "Obs4",
+        link: "pngegg.png"
+    }
+    const Obs5 = {
+        Nome: "img",
+        width: "200px",
+        height: "100px",
+        marginLeft: "calc(100% - 200px)",
+        top: "calc(100% - 100px)",
+        Id: "Obs5",
+        link: "pngegg.png"
+    }
+    const Obs6 = {
+        Nome: "img",
+        width: "200px",
+        height: "100px",
+        marginLeft: "calc(100% - 200px)",
+        top: "calc(100% - 100px)",
+        Id: "Obs6",
+        link: "pngegg.png"
+    }
     const ValorSurgimento = Number(Location.GetLocation()[0]) / 2
     if(seguranca === false){
-        ObjFase = [[Obs1, 500 + ValorSurgimento]]
+        ObjFase = [[Obs1, 500 + ValorSurgimento], [Obs2, 1100 + ValorSurgimento], [Obs3, 1600 + ValorSurgimento], [Obs4, 2200 + ValorSurgimento], [Obs5, 2800 + ValorSurgimento], [Obs6, 3400 + ValorSurgimento]]
         seguranca = true
     }
-
-    
     const Fase1 = new Fase(5000, [Player, WPx + Number(widthPlayer.GetLocation()[0])],Evento)
-    
     Fase1.Getprincipal()
 }
-
-// Inicio
-
 document.onkeydown = function(event){
-    console.log(ObjectsInFase)
     executa(event.code)
 }

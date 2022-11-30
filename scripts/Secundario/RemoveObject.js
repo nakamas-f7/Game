@@ -17,6 +17,5 @@ export class RemoveObject{
     #RemoveObject(){
         const elemento = document.getElementById(this.Object)
         elemento.parentNode.removeChild(elemento)
-
     }
 }

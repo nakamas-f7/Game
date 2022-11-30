@@ -1,9 +1,9 @@
 /*============ SOMENTE O MAIN ============*/
 
 :root{
-    --Start-Walk: calc(100% - 250px);
-    --Final-Walk: 0;
-    --Sky-MarginLeft: calc(100% - 250px);
+    --Inicio-Pulo: calc(100% - 200px);
+    --Altura-Pulo: calc(10% - 200px);
+    --Fim-Pulo: calc(100% - 200px);
 
 }
 
@@ -23,7 +23,6 @@ main{
     position: relative;
     height: 50%;
     width: 100%;
-    background-color: blueviolet;
 }
 #pista{
     position: absolute;
@@ -33,9 +32,24 @@ main{
 #Player{
     position: absolute;
     height: 200px;
-    width: 200px;
-    top: calc(10% - 200px);
-} 
+    width: 130px;
+    top: calc(100% - 200px);
+    animation: teste 3s infinite linear;
+    border: 1px solid black;
+    
+}
+
+@keyframes teste{
+    0%{
+        top: var(--Inicio-Pulo);
+    }
+    50%{
+        top: var(--Altura-Pulo);
+    }
+    100%{
+        top: var(--Fim-Pulo);
+    }
+}
 
 /*==============  Animação ==============*/
 

@@ -2,6 +2,9 @@ import { FindLocation } from './FindLocation.js'
 import { MoveObject } from '../Principal.js'
 
 // 5
+let Left = true
+let Right = true
+let Pulo = true
 
 export class controls{
     #Object
@@ -9,13 +12,15 @@ export class controls{
     #Andar
     #Evento
     #Connect
+    #Altura
 
-    constructor(Object, Buttons, Anda, Evento, Connect){
+    constructor(Object, Buttons, Anda, Evento, Connect, Altura){
         this.#Object = Object
         this.#Buttons = Buttons
         this.#Andar = Anda
         this.#Evento = Evento
         this.#Connect = Connect
+        this.#Altura = Altura
     }
 
     get Object(){
@@ -38,13 +43,17 @@ export class controls{
         return this.#Connect
     }
 
+    get Altura(){
+        return this.#Altura
+    }
+
     get GetControl(){
         return this.#controls
     }
 
+    
+
     #controls(){
-        let Left = true
-        let Right = true
         const anda = this.Andar
         const Connect = this.Connect
 
@@ -52,23 +61,29 @@ export class controls{
         const Player = document.getElementById('Player')
 
         const Location = new FindLocation(box, Player)
-        
-        function Move(Direction){
+
+        function Pulou(){
+            Player.style.animation = "teste 3s linear"
+            
+        }
+        function Move(Acao){
             const ObjectLeft = Location.GetLocation()[4]
-            if(Direction === "Left"){
+            if(Acao === "Left"){
                 if(ObjectLeft >= 0){
                     const MoveLeft = new MoveObject(Player, box, [anda, 0], "-", null, "px", Connect)
                     MoveLeft.GetMoveLocation()
                 }else{
                     console.log("Limite alcançado")
                 } 
-            }else if(Direction === "Right"){
+            }else if(Acao === "Right"){
                 if(ObjectLeft >= 0){
                     const MoveLeft = new MoveObject(Player, box, [anda, 0], "+", null, "px", Connect)
                     MoveLeft.GetMoveLocation()
                 }else{
                     console.log("Limite alcançado")
                 } 
+            }else if(Acao === "Pulo"){
+                Pulou()
             }
         }
         function verification(button){
@@ -90,6 +105,15 @@ export class controls{
                 }else{
                     console.log("Algum erro em Right")
                 }
+            }else if(button === buttons[4]){
+                if(Pulo === true){
+                    Pulo = false
+                    return true
+                }else if(Pulo === false){
+                    return false
+                }else{
+                    console.log("algum erro no pulo")
+                }
             }
         }
         const buttons = this.Buttons
@@ -98,15 +122,22 @@ export class controls{
                 Move("Left")
                 setInterval(() => {
                     Left = true
-                }, 100)
+                }, 10)
             }
         }else if(this.Evento === buttons[2]){
             if(verification(buttons[2]) === true){
                 Move("Right")
                 setInterval(() => {
                     Right = true
-                }, 1000)
+                }, 10)
             }
-        }        
+        }else if(this.Evento === buttons[4]){
+            if(verification(buttons[4]) === true){
+                Move("Pulo")
+                setTimeout(() => {
+                    Pulo = true
+                }, 3000)
+            }
+        }
     }
 }
