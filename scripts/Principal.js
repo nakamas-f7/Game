@@ -61,9 +61,9 @@ export class MoveObject{
     }
     #MoveLocation(){
         // aqui tem uma linha de raciocionio que o Player anda se não tiver nada na tela
+        const Locate = new FindLocation(this.Box, this.Object)
+        const Location = Locate.GetLocation()
         if(this.Connect[0] === false){
-            const Locate = new FindLocation(this.Box, this.Object)
-            const Location = Locate.GetLocation()
             if(this.EquacaoX === "-"){
                 if(((Number(Location[4]) - this.x)) >= 0){
                     if(WPx + Number(Location[0]) < Number(Location[2]) / 2){
@@ -113,8 +113,17 @@ export class MoveObject{
                 WPx += this.x
             }
 
-            if(Meio.length > 0){
-                this.Object.style.top = valorFinal
+            if(Meio.length > 0){ // AQUI ELE TÁ ESCOLHENDO ONDE O PLAYER FICA AO FINAL DO PULO
+                for(let meio in Meio){ // AQUI ELE OLHA AS POSSIBILIDADES
+
+                    const dadosMeio = new FindLocation(this.Box, Meio[meio][0]) // AQUI ELE PEGA OS DADOS DO OBJETO EM CADA CICLO
+                    if(Number(Location[7]) > Number(dadosMeio.GetLocation()[7]) + Number(dadosMeio.GetLocation()[1])){ // BOTTOM > BOTTOM + HEIGHT
+                        this.Object.style.top = valorFinal
+                    }
+                }
+            }else{
+                document.documentElement.style.setProperty("--Inicio-Pulo", "calc( 100% - " + Location[1] + "px)")
+                this.Object.style.top = "calc( 100% - " + Location[1] + "px)"
             }
         }
     }
@@ -442,47 +451,40 @@ class Distancia{
         const DadosPlayer = new FindLocation(Box, PlayerDados)
         DadosPuloRetorno = [" calc(100% - " + DadosPlayer.GetLocation()[1]  + "px)"]
         valorFinal = " calc(100% - " + DadosPlayer.GetLocation()[1] + "px)"
-            if(direcao === "Right"){
-                if(Meio.length > 0){
-                    let valorMeio = Meio.length - 1
-                    const DadosPulo = new FindLocation(Box, Meio[valorMeio][0])
-                    const value1 = getComputedStyle(document.documentElement).getPropertyValue("--Fim-Pulo").split(" ")[1].split("(")[1].split("%")[0] // aqui acesso a porcentagem para calculo do pulo
-                    
-                    const value2 = Meio[valorMeio][0].style.top.split(" ")[0].split("(")[1].split("%")[0]
-                    
-                    let valorDeTroca1 = Number(value1) * (Number(DadosPlayer.GetLocation()[3]) / 100)      // Player
-                    let valorDeTroca2 = Number(value2) * (Number(DadosPulo.GetLocation()[3]) / 100)
 
-                    if(valorDeTroca1 >= valorDeTroca2){
-                        let Secundario =  Number(DadosPulo.GetLocation()[1]) + Number(DadosPlayer.GetLocation()[1]) + 1
-                        valorFinal = (valorDeTroca2 / Number(DadosPulo.GetLocation()[3])) * 100
-                        valorFinal = " calc(" + (valorFinal) + "% - " + Secundario + "px)"
-                        document.documentElement.style.setProperty("--Fim-Pulo", valorFinal) // aqui modifica o valor atual do Final do pulo
-                        DadosPuloRetorno = [valorFinal]
-                    }
-                }
-            }else if(direcao === "Left"){
-                if(Meio.length > 0){
-                    const DadosPulo = new FindLocation(Box, Meio[0][0])
-                    const value1 = getComputedStyle(document.documentElement).getPropertyValue("--Fim-Pulo").split(" ")[1].split("(")[1].split("%")[0] // aqui acesso a porcentagem para calculo do pulo
-                    
-                    const value2 = Meio[0][0].style.top.split(" ")[0].split("(")[1].split("%")[0]
-                    
-                    let valorDeTroca1 = Number(value1) * (Number(DadosPlayer.GetLocation()[3]) / 100)      // Player
-                    let valorDeTroca2 = Number(value2) * (Number(DadosPulo.GetLocation()[3]) / 100)
+        for(let meio in Meio){
+            const DadosPulo = new FindLocation(Box, Meio[meio][0])
+            const value1 = getComputedStyle(document.documentElement).getPropertyValue("--Fim-Pulo").split(" ")[1].split("(")[1].split("%")[0] // porcentagem top do player
+            const value2 = Meio[meio][0].style.top.split(" ")[0].split("(")[1].split("%")[0] // porcentagem top do objeto
+            const value3 = getComputedStyle(document.documentElement).getPropertyValue("--Altura-Pulo").split(" ")[1].split("(")[1].split("%")[0]
+            
+            let valorDeTroca1 = Number(value1) * (Number(DadosPlayer.GetLocation()[3]) / 100) // Player / ele pega o valor do top em pixels de acordo com a porcentagem
+            let valorDeTroca2 = Number(value2) * (Number(DadosPulo.GetLocation()[3]) / 100) // OBJETO / ele pega o valor do top em pixels de acordo com a porcentagem
+            let valorDeTroca3 = (Number(value3) * (Number(DadosPlayer.GetLocation()[3]) / 100)) + Number(DadosPlayer.GetLocation()[1]) // Pulo / ele pega o valor do top em pixels de acordo com a porcentagem
 
-                    if(valorDeTroca1 >= valorDeTroca2){
-                        let Secundario =  Number(DadosPulo.GetLocation()[1]) + Number(DadosPlayer.GetLocation()[1]) + 1
-                        valorFinal = (valorDeTroca2 / Number(DadosPulo.GetLocation()[3])) * 100
-                        valorFinal = " calc(" + (valorFinal) + "% - " + Secundario + "px)"
-                        document.documentElement.style.setProperty("--Fim-Pulo", valorFinal) // aqui modifica o valor atual do Final do pulo
-                        DadosPuloRetorno = [valorFinal]
-                    }
-                }
+            if(valorDeTroca1 >= valorDeTroca2 && valorDeTroca3 < valorDeTroca2 + Number(DadosPulo.GetLocation()[1]) ){
+
+                let Secundario =  Number(DadosPulo.GetLocation()[1]) + Number(DadosPlayer.GetLocation()[1]) + 1
+
+                valorFinal = (valorDeTroca2 / Number(DadosPulo.GetLocation()[3])) * 100
+                valorFinal = " calc(" + (valorFinal) + "% - " + Secundario + "px)"
+                
+                document.documentElement.style.setProperty("--Inicio-Pulo", valorFinal)
+                document.documentElement.style.setProperty("--Fim-Pulo", valorFinal) // aqui modifica o valor atual do Final do pulo
+                DadosPuloRetorno = [valorFinal]
+
+            }else {
+                let Secundario =  Number(DadosPulo.GetLocation()[1]) + Number(DadosPlayer.GetLocation()[1]) + 1
+
+                valorFinal = (valorDeTroca2 / Number(DadosPulo.GetLocation()[3])) * 100
+                valorFinal = " calc(" + (valorFinal) + "% - " + Secundario + "px)"
+                
+                document.documentElement.style.setProperty("--Inicio-Pulo", valorFinal)
+                document.documentElement.style.setProperty("--Fim-Pulo", valorFinal) // aqui modifica o valor atual do Final do pulo
+                DadosPuloRetorno = [valorFinal]
             }
 
-            
-
+        }
         return retorno
     }
 }

@@ -2,7 +2,7 @@
 
 :root{
     --Inicio-Pulo: calc(100% - 200px);
-    --Altura-Pulo: calc(-10% - 200px);
+    --Altura-Pulo: calc(-30% - 200px);
     --Fim-Pulo: calc(100% - 200px);
 
 }
