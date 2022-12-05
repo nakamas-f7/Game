@@ -5,7 +5,7 @@ import { MoveObject } from '../Principal.js'
 let Left = true
 let Right = true
 let Pulo = true
-
+let P = "andando1"
 export class controls{
     #Object
     #Buttons
@@ -43,7 +43,7 @@ export class controls{
         return this.#Connect
     }
 
-    get Altura(){
+    get DadosPulo(){
         return this.#Altura
     }
 
@@ -63,7 +63,7 @@ export class controls{
         const Location = new FindLocation(box, Player)
 
         function Pulou(){
-            Player.style.animation = "teste 3s linear"
+            Player.style.animation = "teste 1.8s linear"
             
         }
         function Move(Acao){
@@ -79,6 +79,7 @@ export class controls{
                 if(ObjectLeft >= 0){
                     const MoveLeft = new MoveObject(Player, box, [anda, 0], "+", null, "px", Connect)
                     MoveLeft.GetMoveLocation()
+
                 }else{
                     console.log("Limite alcançado")
                 } 
@@ -94,7 +95,7 @@ export class controls{
                 }else if(Left === false){
                     return false
                 }else{
-                    console.log("Algum erro Left")
+                    console.log("Algum erro em Left")
                 }
             }else if(button === buttons[2]){
                 if(Right === true){
@@ -119,6 +120,10 @@ export class controls{
         const buttons = this.Buttons
         if(this.Evento === buttons[0]){
             if(verification(buttons[0]) === true){
+                if(P === "andando1"){
+                    Player.src = "andando2.gif"
+                    P = "andando2"
+                }
                 Move("Left")
                 setInterval(() => {
                     Left = true
@@ -126,6 +131,11 @@ export class controls{
             }
         }else if(this.Evento === buttons[2]){
             if(verification(buttons[2]) === true){
+                if(P === "andando2"){
+                    Player.src = "andando1.gif"
+                    P = "andando1"
+                }
+
                 Move("Right")
                 setInterval(() => {
                     Right = true
@@ -135,8 +145,9 @@ export class controls{
             if(verification(buttons[4]) === true){
                 Move("Pulo")
                 setTimeout(() => {
+                    document.documentElement.style.setProperty("--Inicio-Pulo", this.DadosPulo[0])
                     Pulo = true
-                }, 3000)
+                }, 1800)
             }
         }
     }

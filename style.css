@@ -21,11 +21,11 @@ header{
 main{
     height: 80vh;
     width: 100%;
-    background-color: aquamarine;
 }
 
 footer{
     height: 10vh;
     width: 100%;
-    background-color: darkslategray;
+    background-image: url(pista1.png);
+    background-size: contain;
 }

@@ -10,8 +10,9 @@ let Direita = []
 let ObjectsInFase = [Esquerda, Meio, Direita]
 let ObjFase = []
 let seguranca = false
-let direcao = null
-let DadosPulo = [100, 0]
+let direcao = "Right"
+let DadosPuloRetorno = []
+let valorFinal
 export class MoveObject{
     #Object
     #Box
@@ -67,12 +68,13 @@ export class MoveObject{
                 if(((Number(Location[4]) - this.x)) >= 0){
                     if(WPx + Number(Location[0]) < Number(Location[2]) / 2){
                        this.Object.style.marginLeft = ((Number(Location[4]) - this.x) + this.type) 
-                    }
-                    if(WPx >= this.x){
+                       WPx -= this.x
+                    }else if(WPx >= this.x){
                         WPx -= this.x
                     }
                 }else if(((Number(Location[4]) - this.x)) < 0){
                     if(WPx >= this.x){
+                        
                         WPx -= this.x - Number(Location[4])
                     }
                 }
@@ -84,8 +86,11 @@ export class MoveObject{
                 }else if(Location[6] === 0){
                     this.Object.style.marginLeft = Number(Location[4])
                 }
+                
                 WPx += this.x
             }
+
+
         // aqui tem uma linha de raciocinio que o player anda se tiver algo na tela 
         }else if(this.Connect[0] === true){
             for(let y in this.Connect[1]){
@@ -106,6 +111,10 @@ export class MoveObject{
                 WPx -= this.x
             }else if(this.EquacaoX === "+"){ // Aqui ele vai para trás
                 WPx += this.x
+            }
+
+            if(Meio.length > 0){
+                this.Object.style.top = valorFinal
             }
         }
     }
@@ -134,6 +143,7 @@ class Distancia{
     }
     #Distancia(){
         const Box = document.getElementById("pista")
+        const PlayerDados = document.getElementById("Player")
         let retorno = [true, [false, null]] // Permitir andar/ lista[Se o objeto ainda existe na fase/ Objetos na tela]
         for(let x in ObjFase){ // verifica se um elemento está ou não na tela para permitir a criação ou não dele
             const creat = new CreatObject([Box, ObjFase[x][0]])
@@ -303,9 +313,9 @@ class Distancia{
         }
         // Continue aqui carlos, faça ele receber o novo formato do objetoinfase
         for(let x in ObjectsInFase){
+            let adiante = true
             for(let y in ObjectsInFase[x]){
                 // ele verifica o contato entre os objetos
-                let adiante = true
                 const Pista = document.getElementById("pista")
                 const P = new FindLocation(Pista, this.ListPlayer[0])
                 const O = new FindLocation(Pista, ObjectsInFase[x][y][0])
@@ -350,6 +360,7 @@ class Distancia{
                             break
                         }
                     }else if(this.Evento === "KeyA"){
+                        
                         let Calc1 = (Right.MP + Right.WP)
                         let Calc2 = (Right.MO + Right.WO)
                         if(Calc1 <= Right.MO){
@@ -398,7 +409,7 @@ class Distancia{
                             Direita.unshift(ObjectsInFase[x][y])
                             Meio.pop()
                         }
-                    }else if(Right.MO >= Left.MP && Left.MO  <= Right.MP + Right.WP){
+                    }else if(Right.MO > Right.MP + Right.WP && Left.MO < Left.MP + Left.WP){
                         // Esquerda
                         if(Meio.includes(ObjectsInFase[x][y])){
                             Esquerda.push(ObjectsInFase[x][y])
@@ -418,10 +429,60 @@ class Distancia{
                             }
                         }
                     }
+                    
                 }
-                retorno = [adiante, [true, ObjectsInFase]]
+                retorno = [adiante, [true, ObjectsInFase]] 
+            }
+            if(adiante === false){
+                break
             }
         }
+
+        // verificando pulo
+        const DadosPlayer = new FindLocation(Box, PlayerDados)
+        DadosPuloRetorno = [" calc(100% - " + DadosPlayer.GetLocation()[1]  + "px)"]
+        valorFinal = " calc(100% - " + DadosPlayer.GetLocation()[1] + "px)"
+            if(direcao === "Right"){
+                if(Meio.length > 0){
+                    let valorMeio = Meio.length - 1
+                    const DadosPulo = new FindLocation(Box, Meio[valorMeio][0])
+                    const value1 = getComputedStyle(document.documentElement).getPropertyValue("--Fim-Pulo").split(" ")[1].split("(")[1].split("%")[0] // aqui acesso a porcentagem para calculo do pulo
+                    
+                    const value2 = Meio[valorMeio][0].style.top.split(" ")[0].split("(")[1].split("%")[0]
+                    
+                    let valorDeTroca1 = Number(value1) * (Number(DadosPlayer.GetLocation()[3]) / 100)      // Player
+                    let valorDeTroca2 = Number(value2) * (Number(DadosPulo.GetLocation()[3]) / 100)
+
+                    if(valorDeTroca1 >= valorDeTroca2){
+                        let Secundario =  Number(DadosPulo.GetLocation()[1]) + Number(DadosPlayer.GetLocation()[1]) + 1
+                        valorFinal = (valorDeTroca2 / Number(DadosPulo.GetLocation()[3])) * 100
+                        valorFinal = " calc(" + (valorFinal) + "% - " + Secundario + "px)"
+                        document.documentElement.style.setProperty("--Fim-Pulo", valorFinal) // aqui modifica o valor atual do Final do pulo
+                        DadosPuloRetorno = [valorFinal]
+                    }
+                }
+            }else if(direcao === "Left"){
+                if(Meio.length > 0){
+                    const DadosPulo = new FindLocation(Box, Meio[0][0])
+                    const value1 = getComputedStyle(document.documentElement).getPropertyValue("--Fim-Pulo").split(" ")[1].split("(")[1].split("%")[0] // aqui acesso a porcentagem para calculo do pulo
+                    
+                    const value2 = Meio[0][0].style.top.split(" ")[0].split("(")[1].split("%")[0]
+                    
+                    let valorDeTroca1 = Number(value1) * (Number(DadosPlayer.GetLocation()[3]) / 100)      // Player
+                    let valorDeTroca2 = Number(value2) * (Number(DadosPulo.GetLocation()[3]) / 100)
+
+                    if(valorDeTroca1 >= valorDeTroca2){
+                        let Secundario =  Number(DadosPulo.GetLocation()[1]) + Number(DadosPlayer.GetLocation()[1]) + 1
+                        valorFinal = (valorDeTroca2 / Number(DadosPulo.GetLocation()[3])) * 100
+                        valorFinal = " calc(" + (valorFinal) + "% - " + Secundario + "px)"
+                        document.documentElement.style.setProperty("--Fim-Pulo", valorFinal) // aqui modifica o valor atual do Final do pulo
+                        DadosPuloRetorno = [valorFinal]
+                    }
+                }
+            }
+
+            
+
         return retorno
     }
 }
@@ -460,8 +521,12 @@ class Fase{
         }else if(this.Evento === teclas[3]){
             direcao = "Bottom"
         }
+
+        if(this.Evento === "Space"){
+            this.Player[0].style.animation = "none"
+        }
         if(pass[0] === true){
-            const Controle = new controls(this.Player[0], teclas, Apx, this.Evento, pass[1], DadosPulo)            
+            const Controle = new controls(this.Player[0], teclas, Apx, this.Evento, pass[1], DadosPuloRetorno)            
             Controle.GetControl()
         }else if(pass[0] === false){
             console.log("parou aqui")
@@ -476,57 +541,57 @@ function executa(Evento){
     const widthPlayer = new FindLocation(box, Player)
     const Obs1 = {
         Nome: "img",
-        width: "200px",
+        width: "100px",
         height: "100px",
-        marginLeft: "calc(100% - 200px)",
+        marginLeft: "calc(100% - 100px)",
         top: "calc(100% - 100px)",
         Id: "Obs1",
-        link: "pngegg.png"
+        link: "cano.png"
     }
     const Obs2 = {
         Nome: "img",
-        width: "200px",
+        width: "400px",
         height: "100px",
-        marginLeft: "calc(100% - 200px)",
-        top: "calc(100% - 100px)",
+        marginLeft: "calc(100% - 400px)",
+        top: "calc(30% - 100px)",
         Id: "Obs2",
-        link: "pngegg.png"
+        link: "parede.png"
     }
     const Obs3 = {
         Nome: "img",
-        width: "200px",
+        width: "100px",
         height: "100px",
-        marginLeft: "calc(100% - 200px)",
+        marginLeft: "calc(100% - 100px)",
         top: "calc(100% - 100px)",
         Id: "Obs3",
-        link: "pngegg.png"
+        link: "cano.png"
     }
     const Obs4 = {
         Nome: "img",
-        width: "200px",
+        width: "400px",
         height: "100px",
-        marginLeft: "calc(100% - 200px)",
-        top: "calc(100% - 100px)",
+        marginLeft: "calc(100% - 400px)",
+        top: "calc(30% - 100px)",
         Id: "Obs4",
-        link: "pngegg.png"
+        link: "parede.png"
     }
     const Obs5 = {
         Nome: "img",
-        width: "200px",
+        width: "100px",
         height: "100px",
-        marginLeft: "calc(100% - 200px)",
+        marginLeft: "calc(100% - 100px)",
         top: "calc(100% - 100px)",
         Id: "Obs5",
-        link: "pngegg.png"
+        link: "cano.png"
     }
     const Obs6 = {
         Nome: "img",
-        width: "200px",
+        width: "400px",
         height: "100px",
-        marginLeft: "calc(100% - 200px)",
-        top: "calc(100% - 100px)",
+        marginLeft: "calc(100% - 400px)",
+        top: "calc(30% - 100px)",
         Id: "Obs6",
-        link: "pngegg.png"
+        link: "parede.png"
     }
     const ValorSurgimento = Number(Location.GetLocation()[0]) / 2
     if(seguranca === false){
@@ -537,5 +602,6 @@ function executa(Evento){
     Fase1.Getprincipal()
 }
 document.onkeydown = function(event){
+    console.log(ObjectsInFase)
     executa(event.code)
 }

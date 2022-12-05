@@ -2,7 +2,7 @@
 
 :root{
     --Inicio-Pulo: calc(100% - 200px);
-    --Altura-Pulo: calc(10% - 200px);
+    --Altura-Pulo: calc(-10% - 200px);
     --Fim-Pulo: calc(100% - 200px);
 
 }
@@ -10,13 +10,12 @@
 body{
     position: absolute;
     overflow: hidden;
+    
 
 }
 main{
     position: relative;
-    background-image: url(/cenario.jpg);
-    background-repeat: no-repeat;
-    background-size: cover;    
+    background-image: linear-gradient(to bottom, rgb(55, 55, 254), rgb(32, 229, 255));
 
 }
 #ceu{
@@ -34,8 +33,8 @@ main{
     height: 200px;
     width: 130px;
     top: calc(100% - 200px);
-    animation: teste 3s infinite linear;
-    border: 1px solid black;
+    
+
     
 }
 
