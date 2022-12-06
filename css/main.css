@@ -1,9 +1,9 @@
 /*============ SOMENTE O MAIN ============*/
 
 :root{
-    --Inicio-Pulo: calc(100% - 200px);
-    --Altura-Pulo: calc(-30% - 200px);
-    --Fim-Pulo: calc(100% - 200px);
+    --Inicio-Pulo: calc(100% - 100px);
+    --Altura-Pulo: calc(0% - 100px);
+    --Fim-Pulo: calc(100% - 100px);
 
 }
 
@@ -30,9 +30,9 @@ main{
 }
 #Player{
     position: absolute;
-    height: 200px;
-    width: 130px;
-    top: calc(100% - 200px);
+    height: 100px;
+    width: 65px;
+    top: calc(100% - 100px);
     
 
     

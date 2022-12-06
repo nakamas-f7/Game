@@ -6,6 +6,7 @@ let Left = true
 let Right = true
 let Pulo = true
 let P = "andando1"
+let seguranca = null
 export class controls{
     #Object
     #Buttons
@@ -56,27 +57,56 @@ export class controls{
     #controls(){
         const anda = this.Andar
         const Connect = this.Connect
-
+        const pulodados = this.DadosPulo
         const box = document.querySelector('main')
         const Player = document.getElementById('Player')
 
         const Location = new FindLocation(box, Player)
 
         function Pulou(){
+
+            if(Player.style.top === ("calc(100% - " + Location.GetLocation()[1] + "px)")){
+                console.log("entrei aqui")
+                seguranca = null
+            }
+            if(pulodados[2] != null){
+                if(seguranca === null){
+                    let porcentagem = (Number(pulodados[2][0]) / Number(Location.GetLocation()[3])) * 100
+                    let valorAltura = Number(pulodados[2][1]) - porcentagem
+                    valorAltura = " calc(" + valorAltura + "% - " + Location.GetLocation()[1] + "px)"
+                    document.documentElement.style.setProperty("--Altura-Pulo", valorAltura)
+                    seguranca = valorAltura
+                }
+                
+            }
+
+            const musica = document.getElementById("pulomusica")
+            musica.play()
+
             Player.style.animation = "teste 1.8s linear"
+            
             
         }
         function Move(Acao){
             const ObjectLeft = Location.GetLocation()[4]
+            const andamusica = document.getElementById("andandomusica")
             if(Acao === "Left"){
                 if(ObjectLeft >= 0){
+                    if(Pulo === true){
+                        andamusica.play() 
+                     }
                     const MoveLeft = new MoveObject(Player, box, [anda, 0], "-", null, "px", Connect)
                     MoveLeft.GetMoveLocation()
+
                 }else{
                     console.log("Limite alcançado")
                 } 
             }else if(Acao === "Right"){
                 if(ObjectLeft >= 0){
+                    if(Pulo === true){
+                       andamusica.play() 
+                    }
+                    
                     const MoveLeft = new MoveObject(Player, box, [anda, 0], "+", null, "px", Connect)
                     MoveLeft.GetMoveLocation()
 
@@ -107,13 +137,14 @@ export class controls{
                     console.log("Algum erro em Right")
                 }
             }else if(button === buttons[4]){
-                if(Pulo === true){
+                if(Pulo === true && pulodados[1] === true){
                     Pulo = false
                     return true
                 }else if(Pulo === false){
                     return false
                 }else{
-                    console.log("algum erro no pulo")
+                    const bateumusica = document.getElementById("bateumusica")
+                    bateumusica.play()
                 }
             }
         }

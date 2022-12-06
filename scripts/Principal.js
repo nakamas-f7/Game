@@ -13,6 +13,7 @@ let seguranca = false
 let direcao = "Right"
 let DadosPuloRetorno = []
 let valorFinal
+let puloinicial = 0
 export class MoveObject{
     #Object
     #Box
@@ -86,10 +87,8 @@ export class MoveObject{
                 }else if(Location[6] === 0){
                     this.Object.style.marginLeft = Number(Location[4])
                 }
-                
                 WPx += this.x
             }
-
 
         // aqui tem uma linha de raciocinio que o player anda se tiver algo na tela 
         }else if(this.Connect[0] === true){
@@ -100,6 +99,7 @@ export class MoveObject{
                         const Locate = new FindLocation(this.Box, ObjetoNaFase)
                         const Location = Locate.GetLocation()
                         if(this.EquacaoX === "-"){ // Aqui ele vai para frente
+
                             ObjetoNaFase.style.marginLeft = ((Number(Location[4]) + this.x) + this.type)
                         }else if(this.EquacaoX === "+"){ // Aqui ele vai para trás
                             ObjetoNaFase.style.marginLeft = ((Number(Location[4]) - this.x) + this.type)
@@ -119,12 +119,16 @@ export class MoveObject{
                     const dadosMeio = new FindLocation(this.Box, Meio[meio][0]) // AQUI ELE PEGA OS DADOS DO OBJETO EM CADA CICLO
                     if(Number(Location[7]) > Number(dadosMeio.GetLocation()[7]) + Number(dadosMeio.GetLocation()[1])){ // BOTTOM > BOTTOM + HEIGHT
                         this.Object.style.top = valorFinal
+                        
                     }
                 }
             }else{
-                document.documentElement.style.setProperty("--Inicio-Pulo", "calc( 100% - " + Location[1] + "px)")
-                this.Object.style.top = "calc( 100% - " + Location[1] + "px)"
+                document.documentElement.style.setProperty("--Inicio-Pulo", " calc(100% - " + Location[1] + "px)")
+                this.Object.style.top = " calc(100% - " + Location[1] + "px)"
+                document.documentElement.style.setProperty("--Altura-Pulo", " calc(" + puloinicial +"% - " + Location[1] + "px)")
+
             }
+            
         }
     }
 }
@@ -449,8 +453,9 @@ class Distancia{
 
         // verificando pulo
         const DadosPlayer = new FindLocation(Box, PlayerDados)
-        DadosPuloRetorno = [" calc(100% - " + DadosPlayer.GetLocation()[1]  + "px)"]
+        DadosPuloRetorno = [" calc(100% - " + DadosPlayer.GetLocation()[1]  + "px)", true, null]
         valorFinal = " calc(100% - " + DadosPlayer.GetLocation()[1] + "px)"
+
 
         for(let meio in Meio){
             const DadosPulo = new FindLocation(Box, Meio[meio][0])
@@ -462,28 +467,33 @@ class Distancia{
             let valorDeTroca2 = Number(value2) * (Number(DadosPulo.GetLocation()[3]) / 100) // OBJETO / ele pega o valor do top em pixels de acordo com a porcentagem
             let valorDeTroca3 = (Number(value3) * (Number(DadosPlayer.GetLocation()[3]) / 100)) + Number(DadosPlayer.GetLocation()[1]) // Pulo / ele pega o valor do top em pixels de acordo com a porcentagem
 
-            if(valorDeTroca1 >= valorDeTroca2 && valorDeTroca3 < valorDeTroca2 + Number(DadosPulo.GetLocation()[1]) ){
+            if(DadosPulo.GetLocation()[7] > Number(DadosPlayer.GetLocation()[1]) + Number(DadosPlayer.GetLocation()[7]) ){
+                DadosPuloRetorno = [valorFinal, false, [value2, value3]]
 
-                let Secundario =  Number(DadosPulo.GetLocation()[1]) + Number(DadosPlayer.GetLocation()[1]) + 1
+            }else{
 
-                valorFinal = (valorDeTroca2 / Number(DadosPulo.GetLocation()[3])) * 100
-                valorFinal = " calc(" + (valorFinal) + "% - " + Secundario + "px)"
-                
-                document.documentElement.style.setProperty("--Inicio-Pulo", valorFinal)
-                document.documentElement.style.setProperty("--Fim-Pulo", valorFinal) // aqui modifica o valor atual do Final do pulo
-                DadosPuloRetorno = [valorFinal]
+                if(valorDeTroca1 >= valorDeTroca2 && valorDeTroca3 < valorDeTroca2 + Number(DadosPulo.GetLocation()[1]) ){
 
-            }else {
-                let Secundario =  Number(DadosPulo.GetLocation()[1]) + Number(DadosPlayer.GetLocation()[1]) + 1
+                    let Secundario =  Number(DadosPulo.GetLocation()[1]) + Number(DadosPlayer.GetLocation()[1]) + 1
 
-                valorFinal = (valorDeTroca2 / Number(DadosPulo.GetLocation()[3])) * 100
-                valorFinal = " calc(" + (valorFinal) + "% - " + Secundario + "px)"
-                
-                document.documentElement.style.setProperty("--Inicio-Pulo", valorFinal)
-                document.documentElement.style.setProperty("--Fim-Pulo", valorFinal) // aqui modifica o valor atual do Final do pulo
-                DadosPuloRetorno = [valorFinal]
+                    valorFinal = (valorDeTroca2 / Number(DadosPulo.GetLocation()[3])) * 100 // transforma uma quantidade em porcentagem
+                    valorFinal = " calc(" + (valorFinal) + "% - " + Secundario + "px)"
+                    
+                    document.documentElement.style.setProperty("--Inicio-Pulo", valorFinal)
+                    document.documentElement.style.setProperty("--Fim-Pulo", valorFinal) // aqui modifica o valor atual do Final do pulo
+                    DadosPuloRetorno = [valorFinal, true, [[valorDeTroca2 - Number(DadosPulo.GetLocation()[1])], value3]]
+
+                }else {
+                    let Secundario =  Number(DadosPulo.GetLocation()[1]) + Number(DadosPlayer.GetLocation()[1]) + 1
+
+                    valorFinal = (valorDeTroca2 / Number(DadosPulo.GetLocation()[3])) * 100
+                    valorFinal = " calc(" + (valorFinal) + "% - " + Secundario + "px)"
+                    
+                    document.documentElement.style.setProperty("--Inicio-Pulo", valorFinal)
+                    document.documentElement.style.setProperty("--Fim-Pulo", valorFinal) // aqui modifica o valor atual do Final do pulo
+                    DadosPuloRetorno = [valorFinal, true, [valorDeTroca2 - Number(DadosPulo.GetLocation()[1]), value3]]
+                }
             }
-
         }
         return retorno
     }
@@ -531,7 +541,8 @@ class Fase{
             const Controle = new controls(this.Player[0], teclas, Apx, this.Evento, pass[1], DadosPuloRetorno)            
             Controle.GetControl()
         }else if(pass[0] === false){
-            console.log("parou aqui")
+            const bateumusica = document.getElementById("bateumusica")
+            bateumusica.play()
         }
     }
 }
@@ -555,7 +566,7 @@ function executa(Evento){
         width: "400px",
         height: "100px",
         marginLeft: "calc(100% - 400px)",
-        top: "calc(30% - 100px)",
+        top: "calc(50% - 100px)",
         Id: "Obs2",
         link: "parede.png"
     }
@@ -573,7 +584,7 @@ function executa(Evento){
         width: "400px",
         height: "100px",
         marginLeft: "calc(100% - 400px)",
-        top: "calc(30% - 100px)",
+        top: "calc(50% - 100px)",
         Id: "Obs4",
         link: "parede.png"
     }
@@ -591,7 +602,7 @@ function executa(Evento){
         width: "400px",
         height: "100px",
         marginLeft: "calc(100% - 400px)",
-        top: "calc(30% - 100px)",
+        top: "calc(50% - 100px)",
         Id: "Obs6",
         link: "parede.png"
     }
@@ -604,6 +615,5 @@ function executa(Evento){
     Fase1.Getprincipal()
 }
 document.onkeydown = function(event){
-    console.log(ObjectsInFase)
     executa(event.code)
 }
