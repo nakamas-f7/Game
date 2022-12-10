@@ -356,12 +356,13 @@ class Distancia{
                 let calcBottomO = Bottom.HO + Bottom.MO
                 let calcBottomP = Bottom.HP + Bottom.MP
                 // Verificar a possibilidade de andar 
+                console.log(ObjectsInFase[x][y][0].id)
                 if(Bottom.MP > calcBottomO){
                     bottom = true
                 }else if(Bottom.MO > calcBottomP){
                     top = true
                 }
-                if(bottom === false && top === false){
+                if(bottom === false && top === false && ObjectsInFase[x][y][0].id != "castle"){
                     if(this.Evento === "KeyD"){
                         let Calc1 = (Left.MP + Left.WP)
                         let Calc2 = (Left.MO + Left.WO)
@@ -372,7 +373,7 @@ class Distancia{
                             retorno = [adiante, [true, ObjectsInFase]]
                             break
                         }
-                    }else if(this.Evento === "KeyA"){
+                    }else if(this.Evento === "KeyA" && ObjectsInFase[x][y][0].id != "castle"){
                         
                         let Calc1 = (Right.MP + Right.WP)
                         let Calc2 = (Right.MO + Right.WO)
@@ -521,8 +522,7 @@ class Fase{
     }
     #principal(){
         const Apx = 10
-        const Dis = new Distancia([this.Player[0], this.Player[1]],this.Evento, Apx)
-        const pass = Dis.GetDistancia()
+
         const teclas = ["KeyA", "KeyW", "KeyD", "KeyS", "Space"]
         if(this.Evento === teclas[0]){
             direcao = "Left"
@@ -533,17 +533,44 @@ class Fase{
         }else if(this.Evento === teclas[3]){
             direcao = "Bottom"
         }
-
         if(this.Evento === "Space"){
             this.Player[0].style.animation = "none"
         }
-        if(pass[0] === true){
-            const Controle = new controls(this.Player[0], teclas, Apx, this.Evento, pass[1], DadosPuloRetorno)            
-            Controle.GetControl()
-        }else if(pass[0] === false){
-            const bateumusica = document.getElementById("bateumusica")
-            bateumusica.play()
+
+        const H1 = document.getElementById("Win")
+        const Dis = new Distancia([this.Player[0], this.Player[1]],this.Evento, Apx)
+        const pass = Dis.GetDistancia()
+
+        if(this.TFase < WPx && this.Evento === teclas[1]){
+            H1.style.display = "block"
+        }else if(this.TFase <= WPx && this.Evento != teclas[1]){
+            H1.style.display = "none"
+            if(pass[0] === true){
+                let Xvento
+                if(this.Evento === teclas[4]){
+                    const Controle = new controls(this.Player[0], teclas, Apx, null, pass[1], DadosPuloRetorno)            
+                    Controle.GetControl()                    
+                }else{
+                    const Controle = new controls(this.Player[0], teclas, Apx, this.Evento, pass[1], DadosPuloRetorno)            
+                    Controle.GetControl()
+                }
+
+            }else if(pass[0] === false){
+                const bateumusica = document.getElementById("bateumusica")
+                bateumusica.play()
+            }
+        }else{
+            H1.style.display = "none"
+            if(pass[0] === true){
+                const Controle = new controls(this.Player[0], teclas, Apx, this.Evento, pass[1], DadosPuloRetorno)            
+                Controle.GetControl()
+            }else if(pass[0] === false){
+                const bateumusica = document.getElementById("bateumusica")
+                bateumusica.play()
+            }
         }
+
+
     }
 }
 function executa(Evento){
@@ -606,12 +633,22 @@ function executa(Evento){
         Id: "Obs6",
         link: "parede.png"
     }
+
+    const castle = {
+        Nome: "img",
+        width: "300px",
+        height: "400px",
+        marginLeft: "calc(100% - 300px)",
+        top: "calc(100% - 400px)",
+        Id: "castle",
+        link: "castle.png"
+    }
     const ValorSurgimento = Number(Location.GetLocation()[0]) / 2
     if(seguranca === false){
-        ObjFase = [[Obs1, 500 + ValorSurgimento], [Obs2, 1100 + ValorSurgimento], [Obs3, 1600 + ValorSurgimento], [Obs4, 2200 + ValorSurgimento], [Obs5, 2800 + ValorSurgimento], [Obs6, 3400 + ValorSurgimento]]
+        ObjFase = [[Obs1, 500 + ValorSurgimento], [Obs2, 1100 + ValorSurgimento], [Obs3, 1600 + ValorSurgimento], [Obs4, 2200 + ValorSurgimento], [Obs5, 2800 + ValorSurgimento], [Obs6, 3400 + ValorSurgimento], [castle, 4150 + ValorSurgimento]]
         seguranca = true
     }
-    const Fase1 = new Fase(5000, [Player, WPx + Number(widthPlayer.GetLocation()[0])],Evento)
+    const Fase1 = new Fase(4550 + ValorSurgimento, [Player, WPx + Number(widthPlayer.GetLocation()[0])],Evento)
     Fase1.Getprincipal()
 }
 document.onkeydown = function(event){
